@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "CreativoLab-V2",
-    "slug": "CreativoLab-V2",
+    "name": "CreativoLab",
+    "slug": "CreativoLab",
     "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,10 +21,12 @@
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.javier160616.CreativoLab"
     },
     "web": {
       "favicon": "./assets/favicon.png"
