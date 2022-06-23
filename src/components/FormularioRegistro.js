@@ -27,10 +27,9 @@ const FormularioRegistro = ({ navigation, codePhone, professions }) => {
     const [email, setEmail] = useState({ value: '', error: '' });
     const [password, setPassword] = useState({ value: '', error: '' });
     const [confirmPassword, setConfirmPassword] = useState({ value: '', error: '' });
-    const [profession, setProfession] = useState(0);
+    const [profession, setProfession] = useState({ value: '', error: '' });
 
     const [mensajeErrorCode, setMensajeErrorCode] = useState(false);
-    const [mensajeErrorProfession, setMensajeErrorProfession] = useState(false);
     const [comparePassword, setComparePassword] = useState(false);
     const handleSubmit = () => {
         const firstNameError = ValidarCampoTexto(firstName.value);
@@ -43,7 +42,7 @@ const FormularioRegistro = ({ navigation, codePhone, professions }) => {
         const repeatPasswordError = ValidadarPassword(password.value);
 
 
-        if (firstNameError || middleNameError || firstLastName || secondLastName || code == 0 || phoneNumber || email || password || confirmPassword || profession == 0) {
+        if (firstNameError || middleNameError || firstLastName || secondLastName || code == 0 || phoneNumber || email) {
             setFirstName({ ...firstName, error: firstNameError });
             setMiddleName({ ...middleName, error: middleNameError });
             setFirstLastName({ ...firstLastName, error: firstLastNameError });
@@ -55,11 +54,8 @@ const FormularioRegistro = ({ navigation, codePhone, professions }) => {
             setEmail({...email, error: emailError});
             setPassword({...password, error: passwordError});
             setConfirmPassword({...confirmPassword, error: repeatPasswordError});
-            if(password.value != confirmPassword.value){
+            if(password === confirmPassword){
                 setComparePassword(true)
-            }
-            if(profession == 0){
-                setMensajeErrorProfession(true);
             }
             return;
         }
@@ -184,7 +180,7 @@ const FormularioRegistro = ({ navigation, codePhone, professions }) => {
                         errorText={password.error}
                         secureTextEntry
                     />
-                    {comparePassword ? <Text style={styles.error}>Las contraseñas no coinciden</Text> : null}
+                    {comparePassword ? <Text>Este campo es obligatorio</Text>: null}
                 </View>
                 {/* Confirmar Contraseña */}
                 <View style={[Theme.styles.mv10, Theme.styles.w100]}>
@@ -198,29 +194,25 @@ const FormularioRegistro = ({ navigation, codePhone, professions }) => {
                         errorText={confirmPassword.error}
                         secureTextEntry
                     />
-                    {comparePassword ? <Text style={styles.error}>Las contraseñas no coinciden</Text> : null}
                 </View>
                 {/* Profesión */}
                 <View style={[Theme.styles.mv10, Theme.styles.w100]}>
                     <Text style={[Theme.styles.fs16, Theme.styles.bold, themeTextFormularios]}>Profesión</Text>
-                    <View style={[Theme.styles.borde1, Theme.styles.bordeGris, Theme.styles.bordeRedondo1, Theme.styles.mt10,  mensajeErrorProfession ? Theme.styles.bordeRojo : null]}>
+                    <View style={[Theme.styles.borde1, Theme.styles.bordeGris, Theme.styles.bordeRedondo1, Theme.styles.mt10]}>
                         <Picker
                             dropdownIconColor={themeColorIcons}
                             style={[Theme.colors.backgroundBlanco]}
                             mode='dropdown'
                             selectedValue={profession}
-                            onValueChange={profession => {
-                                setProfession(profession)
-                                setMensajeErrorProfession(false)
-                            }}
+                            onValueChange={profession => setProfession(profession)}
                         >
                             <Picker.Item label='-- Seleccionar Profesión --' value="0" style={themeTextFormularios} />
                             {professions.map(prof => (
                                 <Picker.Item key={prof.id} label={prof.profession} value={prof.id} style={themeTextFormularios} />
                             ))}
                         </Picker>
+
                     </View>
-                        {mensajeErrorProfession ? <Text style={styles.error}>Este campos es obligatorio</Text> : null}
                 </View>
 
                 {/* BOTON SUBMIT */}
