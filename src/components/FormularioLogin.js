@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Text, SafeAreaView, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
+import { Text, SafeAreaView, View, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { Button } from 'react-native-paper';
 import Theme from '../Theme/Theme';
 //Helpers
@@ -10,6 +10,8 @@ import ValidadarPassword from '../helpers/ValidarPassword';
 //Componentes
 import ButtonRegresar from '../components/Buttonregresar'
 import TextInput from '../components/TextInput';
+import axios from 'axios';
+import clienteAxios from '../config/axios';
 
 const FormularioLogin = ({ navigation }) => {
     const { themeTextStyle, themeContainerStyle, themeButtons, themeFormularios, themeTextFormularios } = DetectarTema();
@@ -17,7 +19,7 @@ const FormularioLogin = ({ navigation }) => {
     const [email, setEmail] = useState({ value: '', error: '' });
     const [password, setPassword] = useState({ value: '', error: '' });
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const emailError = ValidarEmail(email.value);
         const passwordError = ValidadarPassword(password.value);
 
@@ -26,14 +28,37 @@ const FormularioLogin = ({ navigation }) => {
             setPassword({ ...password, error: passwordError })
             return
         }
-        setTimeout(() => {
-            setModalCarga(false);
-            navigation.navigate('Index')
-        }, 2000);
+
+        const iniciarSesion = {
+            email: email.value,
+            password: password.value
+        }
+        const config = {
+            headers: {
+                "Content-Type": "application/json;charset=UTF-8"
+            }
+        }
+        try {
+            await axios.post(`https://dev.creativolab.com.mx/api/v1/login`, iniciarSesion, config)
+            
+            // await clienteAxios.post('/login', iniciarSesion, config)
+            console.log('Todo bien');
+        } catch (error) {
+            console.log(error.response.data.status);
+            if(error.response.data.status ==='400'){
+                Alert.alert('Credenciales Incorrectas', 'Las credenciales son incorrectas', [{text: 'Ok'}])
+            }else if(error.response.data.status === '401'){
+                Alert.alert('Cuenta no verificada', 'Tu cuenta aun no está verificada, por favor revisa tu email', [{text: 'Ok'}])
+            }else{
+                Alert.alert('Usuario no registrado', 'Si no tiene una cuenta, por favor cree una', [{text: 'Ok'}])
+            }
+        }
     }
 
     const irARegistro = () => {
         navigation.navigate('Registro')
+        setEmail({value: '', error: ''})
+        setPassword({value: '', error: ''})
     }
     return (
         <View style={[Theme.styles.w90, Theme.styles.sombra, Theme.styles.ph20, Theme.styles.pv20, Theme.styles.bordeRedondo1, themeFormularios]}>
