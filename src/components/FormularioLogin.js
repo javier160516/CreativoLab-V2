@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Text, SafeAreaView, View, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native'
+import { Text, View, TouchableOpacity, Alert } from 'react-native'
 import { Button } from 'react-native-paper';
 import Theme from '../Theme/Theme';
 //Helpers
@@ -8,16 +8,19 @@ import ValidarEmail from '../helpers/ValidarEmail';
 import ValidadarPassword from '../helpers/ValidarPassword';
 
 //Componentes
-import ButtonRegresar from '../components/Buttonregresar'
 import TextInput from '../components/TextInput';
 import axios from 'axios';
-import clienteAxios from '../config/axios';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useLogin } from '../context/LoginProvider';
 
 const FormularioLogin = ({ navigation }) => {
     const { themeTextStyle, themeContainerStyle, themeButtons, themeFormularios, themeTextFormularios } = DetectarTema();
 
     const [email, setEmail] = useState({ value: '', error: '' });
     const [password, setPassword] = useState({ value: '', error: '' });
+    const { setLogueado } = useLogin();
+
 
     const handleSubmit = async () => {
         const emailError = ValidarEmail(email.value);
@@ -28,37 +31,39 @@ const FormularioLogin = ({ navigation }) => {
             setPassword({ ...password, error: passwordError })
             return
         }
-
-        const iniciarSesion = {
-            email: email.value,
-            password: password.value
-        }
-        const config = {
-            headers: {
-                "Content-Type": "application/json;charset=UTF-8"
-            }
-        }
         try {
-            await axios.post(`https://dev.creativolab.com.mx/api/v1/login`, iniciarSesion, config)
-            
-            // await clienteAxios.post('/login', iniciarSesion, config)
-            console.log('Todo bien');
+            const iniciarSesion = {
+                email: email.value.trim(),
+                password: password.value.trim()
+            }
+            const config = {
+                headers: {
+                    "Content-Type": "application/json;charset=UTF-8"
+                }
+            }
+            const res = await axios.post(`https://dev.creativolab.com.mx/api/v1/login`, iniciarSesion, config);
+            let status = true;
+            if (res.data.status === '200') {
+                setEmail({ value: '', error: '' });
+                setPassword({ value: '', error: '' });
+                setLogueado(true)
+                AsyncStorage.setItem('@creativo_lab', JSON.stringify(status));
+            }
         } catch (error) {
-            console.log(error.response.data.status);
-            if(error.response.data.status ==='400'){
-                Alert.alert('Credenciales Incorrectas', 'Las credenciales son incorrectas', [{text: 'Ok'}])
-            }else if(error.response.data.status === '401'){
-                Alert.alert('Cuenta no verificada', 'Tu cuenta aun no está verificada, por favor revisa tu email', [{text: 'Ok'}])
-            }else{
-                Alert.alert('Usuario no registrado', 'Si no tiene una cuenta, por favor cree una', [{text: 'Ok'}])
+            if (error.response.data.status === '400') {
+                Alert.alert('Credenciales Incorrectas', 'Las credenciales son incorrectas', [{ text: 'Ok' }])
+            } else if (error.response.data.status === '401') {
+                Alert.alert('Cuenta no verificada', 'Tu cuenta aun no está verificada, por favor revisa tu email', [{ text: 'Ok' }])
+            } else {
+                Alert.alert('Usuario no registrado', 'Si no tiene una cuenta, por favor cree una', [{ text: 'Ok' }])
             }
         }
     }
 
     const irARegistro = () => {
         navigation.navigate('Registro')
-        setEmail({value: '', error: ''})
-        setPassword({value: '', error: ''})
+        setEmail({ value: '', error: '' })
+        setPassword({ value: '', error: '' })
     }
     return (
         <View style={[Theme.styles.w90, Theme.styles.sombra, Theme.styles.ph20, Theme.styles.pv20, Theme.styles.bordeRedondo1, themeFormularios]}>

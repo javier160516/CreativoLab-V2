@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar'
 import React, {useState, useEffect} from 'react'
-import { SafeAreaView, ScrollView, Text, View } from 'react-native'
+import { SafeAreaView, ScrollView, View } from 'react-native'
 import DetectarTema from '../helpers/DetectarTema';
 import axios from 'axios';
 //Estilos
@@ -24,7 +24,7 @@ const Registro = ({ navigation }) => {
     obtenerDatos();
   }, [])
 
-  const { themeTextStyle, themeContainerStyle, themeButtons, themeFormularios, themeTextFormularios } = DetectarTema();
+  const { themeContainerStyle } = DetectarTema();
 
   return (
     <SafeAreaView style={[Theme.styles.flex1, themeContainerStyle,  Theme.styles.pt20,Theme.styles.justifyCenter]}>

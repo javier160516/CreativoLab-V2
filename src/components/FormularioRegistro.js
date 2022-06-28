@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { SafeAreaView, ScrollView, Text, Viewm, TouchableOpacity, StyleSheet, View, Alert } from 'react-native'
+import { Text, TouchableOpacity, StyleSheet, View, Alert } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper';
 import DetectarTema from '../helpers/DetectarTema';
 import Theme from '../Theme/Theme';
@@ -95,6 +95,7 @@ const FormularioRegistro = ({ navigation, codePhone, professions }) => {
                 setLoader(false)
             }, 1500);
         } catch (error) {
+            console.log(error.response.data);
             if (error.response.data.status === '400') {
                 Alert.alert('Error', 'El correo ingresado ya está asociado a una cuenta existente', [{ text: 'Ok' }]);
             } else {

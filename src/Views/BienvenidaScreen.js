@@ -1,15 +1,12 @@
 import React from 'react'
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, Text, View } from 'react-native';
-import DetectarTema from '../helpers/DetectarTema';
-
-//Tema
-import Theme from '../Theme/Theme';
-//Fuentes
-import { useFonts } from 'expo-font';
-//Animaciones
 import * as Animatable from 'react-native-animatable';
+import { SafeAreaView, Text } from 'react-native';
+import DetectarTema from '../helpers/DetectarTema';
+import Theme from '../Theme/Theme';
+import { useFonts } from 'expo-font';
 import { Button } from 'react-native-paper';
+import { Logout } from '../helpers/Logout';
 
 const BienvenidaScreen = ({ navigation }) => {
   const { themeTextStyle, themeContainerStyle, themeButtons } = DetectarTema();
@@ -30,7 +27,6 @@ const BienvenidaScreen = ({ navigation }) => {
   const handleRegistro = () => {
     navigation.navigate('Registro');
   }
-
 
   return (
     <>
