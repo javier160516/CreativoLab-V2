@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import BienvenidaScreen from './Views/BienvenidaScreen';
 import Login from './Views/Login';
@@ -61,7 +61,7 @@ const MainNavigation = () => {
         }
         getData();
       }, []);
-    return logueado ? <Home /> : <StackNavigator />
+    return logueado ? <Home  /> : <StackNavigator />
 }
 
 export default MainNavigation
