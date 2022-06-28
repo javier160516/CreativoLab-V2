@@ -10,7 +10,9 @@ import BienvenidaScreen from './src/Views/BienvenidaScreen';
 import Login from './src/Views/Login';
 import Registro from './src/Views/Registro';
 import DetectarTema from './src/helpers/DetectarTema';
-
+import Home from './src/Views/Home';
+// import Education from './src/Views/Education';
+import HomeScreen from './src/Views/Home';
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -58,11 +60,34 @@ export default function App() {
             }
           }}
         />
-        {/* <Stack.Screen
-          name='Index'
-          component={Index}
-          options={{ headerShown: false }}
-        /> */}
+        <Stack.Screen
+          name='Home'
+          component={Home}
+          options={{
+            headerMode: 'screen',
+            headerTitleAlign: 'center', 
+            headerTintColor: 
+            themeTextStyle.color, 
+            headerStyle: { 
+              backgroundColor: themeContainerStyle.backgroundColor 
+            }
+          }}
+        />
+        <Stack.Screen
+          name={"HomeS"}
+          component={HomeScreen}
+          options={{
+            headerMode: 'screen',
+            headerTitleAlign: 'center', 
+            headerTintColor: 
+            themeTextStyle.color, 
+            headerStyle: { 
+              backgroundColor: themeContainerStyle.backgroundColor 
+            }
+          }}
+        />
+
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -30,7 +30,9 @@ const BienvenidaScreen = ({ navigation }) => {
   const handleRegistro = () => {
     navigation.navigate('Registro');
   }
-
+  const handleHome = () => {
+    navigation.navigate('Home');
+  }
 
   return (
     <>
@@ -45,6 +47,12 @@ const BienvenidaScreen = ({ navigation }) => {
           </Text>
         </Animatable.View>
         <Animatable.View animation='fadeInUpBig' duration={2000} style={[Theme.styles.w100, Theme.styles.alignCenter, Theme.styles.mb80]}>
+          <Button mode='contained'
+            style={[Theme.styles.w80, Theme.styles.mt10, Theme.styles.mb10]}
+            color={Theme.colors.azul}
+            onPress={() => handleHome()}>
+            <Text style={[Theme.styles.bold, Theme.styles.fs15]}>Entrar al Home</Text>
+          </Button>
           <Button
             mode='contained'
             style={[Theme.styles.w80, Theme.styles.mt10, Theme.styles.mb10]}
