@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
-import { Text, BackHandler, Alert } from 'react-native'
+import { BackHandler, Alert } from 'react-native'
 import { useLogin } from '../context/LoginProvider';
 import { Logout } from '../helpers/Logout';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 //Screen
 import Education from './Education';
@@ -15,15 +14,30 @@ import Services from './Services';
 import Tesmonials from './Tesmonials';
 import ComponentMenu from '../components/ComponentMenu';
 
+import DetectarTema from '../helpers/DetectarTema';
 
 const Drawer = createDrawerNavigator();
 
 const Menu = () => {
+    const { themeTextStyle, themeContainerStyle } = DetectarTema();
+
     return (
         <Drawer.Navigator
             useLegacyImplementation
-            drawerContent={props => <ComponentMenu {...props}/>}>
-            <Drawer.Screen name="Dashboard" component={Dashboard} />
+            drawerContent={props => <ComponentMenu {...props} />}
+            screenOptions={{ headerTitleAlign: 'center' }}>
+            <Drawer.Screen
+                name="Dashboard"
+                component={Dashboard}
+                options={{
+                    headerMode: 'screen',
+                    headerTitleAlign: 'center',
+                    headerTintColor: themeTextStyle.color,
+                    headerStyle: {
+                        backgroundColor: themeContainerStyle.backgroundColor
+                    }
+                }} 
+            />
             <Drawer.Screen name="Educacion" component={Education} />
             <Drawer.Screen name="Habilidades" component={Skills} />
             <Drawer.Screen name="Experiencia" component={Experience} />

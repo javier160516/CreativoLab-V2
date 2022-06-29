@@ -14,7 +14,7 @@ const Theme = {
             lightText: { color: '#000' }
         },
         backgroundBlanco: { backgroundColor: '#FFF' },
-        colorAzul: {color: '#1363DF'},
+        colorAzul: { color: '#1363DF' },
         blanco: '#FFF',
         negro: '#000',
         azul: '#1363DF',
@@ -22,6 +22,7 @@ const Theme = {
         naranja: '#F77F00',
         gris: '#CCC',
         grisOcuro: '#2B2B2B',
+        grisClaro: '#dddfeb',
     },
     styles: {
         /** FLEX **/
@@ -73,7 +74,7 @@ const Theme = {
         semiBold: { fontWeight: '700' },
         /** POSICIONES **/
         positionAbsolute: { position: 'absolute' },
-        topStatus: {top: getStatusBarHeight()},
+        topStatus: { top: getStatusBarHeight() },
         top: { top: 33 },
         left: { left: 18 },
 
@@ -89,7 +90,7 @@ const Theme = {
         bordeAzul: { borderColor: '#1363DF' },
         bordeBlanco: { borderColor: '#FFFFFF' },
         bordeGris: { borderColor: '#CCC' },
-        bordeRojo: {borderColor: '#F32424'},
+        bordeRojo: { borderColor: '#F32424' },
 
         /** TAMAÑO DE BORDE **/
         borde1: { borderWidth: 1 },
@@ -107,11 +108,12 @@ const Theme = {
             shadowColor: "#000",
             shadowOffset: {
                 width: 0,
-                height: 3,
+                height: 1,
             },
-            shadowOpacity: 0.29,
-            shadowRadius: 4.65,
-            elevation: 7,
+            shadowOpacity: 0.20,
+            shadowRadius: 1.41,
+
+            elevation: 2,
         }
     }
 }
