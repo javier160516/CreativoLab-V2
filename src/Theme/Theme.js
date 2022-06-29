@@ -33,20 +33,30 @@ const Theme = {
         pv60: { paddingVertical: 60 },
         ph10: { paddingHorizontal: 10 },
         ph20: { paddingHorizontal: 20 },
+        ph60: {paddingHorizontal: 60 }, 
         pb40: { paddingBottom: 40 },
         pb20: { paddingBottom: 20 },
         pt8: { paddingTop: 8 },
         pt20: { paddingTop: 20 },
         pt40: { paddingTop: 40 },
         /** MARGIN **/
+        /** VERTICAL **/
         mv10: { marginVertical: 10 },
+        mv20: { marginVertical: 20 },
         mv30: { marginVertical: 30 },
         mv60: { marginVertical: 60 },
+        /** HORIZONTAL **/
+        mh10: { marginHorizontal: 10 },
+        mh20: { marginHorizontal: 20 },
+        mh30: { marginHorizontal: 30 },
+        mh60: { marginHorizontal: 60 },
+        /** BOTTOM **/
         mb10: { marginBottom: 10 },
         mb20: { marginBottom: 20 },
         mb40: { marginBottom: 40 },
         mb60: { marginBottom: 60 },
         mb80: { marginBottom: 80 },
+        /** TOP **/
         mt10: { marginTop: 10 },
         mt20: { marginTop: 20 },
         mt40: { marginTop: 40 },
