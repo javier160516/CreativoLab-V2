@@ -1,17 +1,31 @@
 import 'react-native-gesture-handler';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import { Text, View, SafeAreaView, ScrollView, StyleSheet, Alert } from 'react-native';
 import Theme from '../Theme/Theme';
 import DetectarTema from '../helpers/DetectarTema';
 import { Fontisto } from '@expo/vector-icons';
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import { Chart, Line, Area, HorizontalAxis, VerticalAxis } from 'react-native-responsive-linechart'
+import axios from 'axios';
+import AlertLogin from '../helpers/AlertLogin';
 
 const Dashboard = () => {
-  const { themeContainerStyle, themeTextStyle, themeColorIcons, themeCards, themeCardsText, themeGraficsText } = DetectarTema();
+  const { themeContainerStyle, themeCards, themeCardsText, themeGraficsText } = DetectarTema();
 
-
+  useEffect(() => {
+    const obtenerDatos = async () => {
+      try {
+        const respuesta = await axios.get('http://dev.creativolab.com.mx/api/v1/dashboard');
+        console.log(respuesta.data.status);
+      } catch (error) {
+        if (error.response.data.status === 401) {
+          AlertLogin()
+        }
+      }
+    }
+    obtenerDatos();
+  }, [])
 
   return (
     <SafeAreaView style={[Theme.styles.flex1, themeContainerStyle]}>

@@ -52,15 +52,15 @@ const StackNavigator = () => {
 
 const MainNavigation = () => {
     const { logueado, setLogueado } = useLogin();
-    useEffect(() => {
-        const getData = async () => {
-            const asyncStorage = await AsyncStorage.getItem('@creativo_lab')
-            if(asyncStorage === 'true'){
-                setLogueado(asyncStorage)
-            }
-        }
-        getData();
-      }, []);
+    // useEffect(() => {
+    //     const getData = async () => {
+    //         const asyncStorage = await AsyncStorage.getItem('@creativo_lab')
+    //         if(asyncStorage === 'true'){
+    //             setLogueado(asyncStorage)
+    //         }
+    //     }
+    //     getData();
+    //   }, []);
     return logueado ? <Home  /> : <StackNavigator />
 }
 
