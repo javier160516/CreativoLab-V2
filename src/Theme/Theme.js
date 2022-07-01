@@ -49,6 +49,8 @@ const Theme = {
         pt8: { paddingTop: 8 },
         pt20: { paddingTop: 20 },
         pt40: { paddingTop: 40 },
+        pt60: { paddingTop: 60 },
+        pt80: { paddingTop: 80 },
         /** MARGIN **/
         /** VERTICAL **/
         mv10: { marginVertical: 10 },
