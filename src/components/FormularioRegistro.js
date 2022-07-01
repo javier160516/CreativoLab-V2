@@ -89,23 +89,33 @@ const FormularioRegistro = ({ navigation, codePhone, professions }) => {
                 Alert.alert('Cuenta creada correctamente',
                     'Te hemos enviado un email a tu correo para confirmar tu cuenta',
                     [
-                        { text: 'Iniciar Sesión', onPress: () => irALogin() },
-                        { text: 'Cerrar' }
+                        { text: 'Iniciar Sesión', onPress: () => {
+                            irALogin()
+ 
+                        }},
+                        { text: 'Cerrar', onPress: () => {
+                            vaciarFormulario();
+                            setLoader(false);
+                        }}
                     ]);
-                setLoader(false)
             }, 1500);
         } catch (error) {
             console.log(error.response.data);
             if (error.response.data.status === '400') {
                 Alert.alert('Error', 'El correo ingresado ya está asociado a una cuenta existente', [{ text: 'Ok' }]);
+                setLoader(false)
             } else {
-                Alert.alert('Error', error.response.data.statu, [{ text: 'Ok' }]);
+                Alert.alert('Error', error.response.data.status, [{ text: 'Ok' }]);
             }
         }
     }
 
     const irALogin = () => {
         navigation.navigate('Login');
+        vaciarFormulario();
+    }
+
+    const vaciarFormulario = () => {
         setFirstName({ value: '', error: '' });
         setMiddleName({ value: '', error: '' });
         setFirstLastName({ value: '', error: '' });

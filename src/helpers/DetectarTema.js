@@ -11,7 +11,9 @@ const DetectarTema = () => {
     const themeButtons = colorScheme === 'light' ? [Theme.styles.bordeAzul, Theme.styles.borde2] : [Theme.colors.backgroundBlanco, Theme.styles.borde1];
     const themeFormularios = colorScheme === 'light' ? Theme.colors.dark.darkContainer : Theme.colors.light.lightContainer;
     const themeTextFormularios = colorScheme === 'light' ? Theme.colors.dark.darkText : Theme.colors.light.lightText;
-    // const themeCards = colorScheme === 'light' ? 
+    const themeCards = colorScheme === 'light' ? Theme.colors.backgroundBlanco : Theme.colors.backgroundGray3;
+    const themeCardsText = colorScheme === 'light' ? '' : Theme.colors.dark.darkText;
+    const themeGraficsText = colorScheme === 'light' ? Theme.colors.negro : Theme.colors.blanco;
     return {
         themeTextStyle,
         themeContainerStyle,
@@ -19,7 +21,9 @@ const DetectarTema = () => {
         themeButtons,
         themeFormularios,
         themeTextFormularios,
-        // themeCards
+        themeCards,
+        themeCardsText,
+        themeGraficsText
     };
 }
 
