@@ -36,13 +36,14 @@ const Theme = {
         grisClaro: '#dddfeb',
         green: '#1CC88A',
         greenBlue: '#36B9CC',
-
+        bordeTextInput: '#CCC',
     },
     styles: {
         /** FLEX **/
         flex1: { flex: 1 },
         flexRow: { flexDirection: 'row' },
         /** PADDING **/
+        pv5: { paddingVertical: 5 },
         pv10: { paddingVertical: 10 },
         pv20: { paddingVertical: 20 },
         pv30: { paddingVertical: 30 },
@@ -93,6 +94,7 @@ const Theme = {
         fs16: { fontSize: 16 },
         fs17: { fontSize: 17 },
         fs20: { fontSize: 20 },
+        fs22: { fontSize: 22 },
         fsTitle: { fontSize: 40 },
         fsTitle2: { fontSize: 30 },
         fsTitle3: { fontSize: 25 },

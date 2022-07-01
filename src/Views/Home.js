@@ -24,7 +24,7 @@ const Menu = () => {
     return (
         <Drawer.Navigator
             useLegacyImplementation
-            drawerContent={props => <ComponentMenu {...props}/>}
+            drawerContent={props => <ComponentMenu {...props} />}
             screenOptions={{ headerTitleAlign: 'center' }}>
             <Drawer.Screen
                 name="Dashboard"
@@ -36,9 +36,19 @@ const Menu = () => {
                     headerStyle: {
                         backgroundColor: themeContainerStyle.backgroundColor
                     }
-                }} 
+                }}
             />
-            <Drawer.Screen name="Educacion" component={Education} />
+            <Drawer.Screen
+                name="Educación"
+                component={Education}
+                options={{
+                    headerMode: 'screen',
+                    headerTitleAlign: 'center',
+                    headerTintColor: themeTextStyle.color,
+                    headerStyle: {
+                        backgroundColor: themeContainerStyle.backgroundColor
+                    }
+                }} />
             <Drawer.Screen name="Habilidades" component={Skills} />
             <Drawer.Screen name="Experiencia" component={Experience} />
             <Drawer.Screen name="Servicio" component={Services} />
