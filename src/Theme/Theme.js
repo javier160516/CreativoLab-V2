@@ -1,6 +1,7 @@
 import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 
+
 const Theme = {
     ...DefaultTheme,
     colors: {
@@ -14,7 +15,10 @@ const Theme = {
             lightText: { color: '#000' }
         },
         backgroundBlanco: { backgroundColor: '#FFF' },
+        backgroundRed: {backgroundColor: '#F32424'},
+        backgroundBlue: {backgroundColor: '#1336DF'},
         colorAzul: { color: '#1363DF' },
+        WhiteColor: {color: '#FFF'},
         blanco: '#FFF',
         negro: '#000',
         azul: '#1363DF',
@@ -29,6 +33,7 @@ const Theme = {
         flex1: { flex: 1 },
         flexRow: { flexDirection: 'row' },
         /** PADDING **/
+        pv10: { paddingVertical: 10 },
         pv20: { paddingVertical: 20 },
         pv30: { paddingVertical: 30 },
         pv60: { paddingVertical: 60 },
