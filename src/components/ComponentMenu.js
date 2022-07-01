@@ -5,7 +5,6 @@ import Theme from '../Theme/Theme'
 import { Avatar } from 'react-native-paper'
 import DetectarTema from '../helpers/DetectarTema';
 const ComponentMenu = (props) => {
-    console.log(props);
     const { themeTextStyle, themeContainerStyle } = DetectarTema();
     return (
         <View style={[Theme.styles.flex1, themeContainerStyle]}>
@@ -16,7 +15,7 @@ const ComponentMenu = (props) => {
             <DrawerContentScrollView {...props}
                 contentContainerStyle={[themeContainerStyle, { paddingTop: 0 }]}
             >
-                <DrawerItemList {...props} />
+                <DrawerItemList  {...props}/>
             </DrawerContentScrollView>
         </View>
     )

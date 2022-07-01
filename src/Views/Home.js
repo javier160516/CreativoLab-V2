@@ -24,7 +24,7 @@ const Menu = () => {
     return (
         <Drawer.Navigator
             useLegacyImplementation
-            drawerContent={props => <ComponentMenu {...props} />}
+            drawerContent={props => <ComponentMenu {...props}/>}
             screenOptions={{ headerTitleAlign: 'center' }}>
             <Drawer.Screen
                 name="Dashboard"
