@@ -1,26 +1,38 @@
 import 'react-native-gesture-handler';
 import React, { useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, SafeAreaView, ScrollView, StyleSheet, Alert } from 'react-native';
+import { Text, View, SafeAreaView, ScrollView, Alert } from 'react-native';
 import Theme from '../Theme/Theme';
 import DetectarTema from '../helpers/DetectarTema';
 import { Fontisto } from '@expo/vector-icons';
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import { Card, Title, Paragraph } from 'react-native-paper';
 import { Chart, Line, Area, HorizontalAxis, VerticalAxis } from 'react-native-responsive-linechart'
 import axios from 'axios';
-import AlertLogin from '../helpers/AlertLogin';
+import { useLogin } from '../context/LoginProvider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Dashboard = () => {
   const { themeContainerStyle, themeCards, themeCardsText, themeGraficsText } = DetectarTema();
-
+  const { setLogueado } = useLogin()
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
-        const respuesta = await axios.get('http://dev.creativolab.com.mx/api/v1/dashboard');
-        console.log(respuesta.data.status);
+        await axios.get('http://dev.creativolab.com.mx/api/v1/dashboard');
       } catch (error) {
-        if (error.response.data.status === 401) {
-          AlertLogin()
+        if (error.response.data.status == 401) {
+          Alert.alert(
+            'No Autenticado',
+            'Parece que no estás autenticado, por favor, inicia sesión',
+            [
+              {
+                text: 'Iniciar Sesión',
+                onPress: () => {
+                  setLogueado(false);
+                  AsyncStorage.clear();
+                }
+              }
+            ]
+          )
         }
       }
     }

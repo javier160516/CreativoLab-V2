@@ -42,12 +42,12 @@ const FormularioLogin = ({ navigation }) => {
                 }
             }
             const res = await axios.post(`https://dev.creativolab.com.mx/api/v1/login`, iniciarSesion, config);
-            // let status = true;
+            let status = true;
             if (res.data.status === '200') {
                 setEmail({ value: '', error: '' });
                 setPassword({ value: '', error: '' });
                 setLogueado(true)
-                // AsyncStorage.setItem('@creativo_lab', JSON.stringify(status));
+                AsyncStorage.setItem('@creativo_lab', JSON.stringify(status));
             }
         } catch (error) {
             if (error.response.data.status === '400') {
