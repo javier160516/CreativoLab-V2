@@ -4,7 +4,13 @@ import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawe
 import Theme from '../Theme/Theme'
 import { Avatar } from 'react-native-paper'
 import DetectarTema from '../helpers/DetectarTema';
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { Logout } from '../helpers/Logout'
+import { useLogin } from '../context/LoginProvider'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 const ComponentMenu = (props) => {
+    const { setLogueado } = useLogin();
     const { themeTextStyle, themeContainerStyle } = DetectarTema();
     return (
         <View style={[Theme.styles.flex1, themeContainerStyle]}>
@@ -15,8 +21,18 @@ const ComponentMenu = (props) => {
             <DrawerContentScrollView {...props}
                 contentContainerStyle={[themeContainerStyle, { paddingTop: 0 }]}
             >
-                <DrawerItemList  {...props}/>
+                <DrawerItemList  {...props} />
             </DrawerContentScrollView>
+            <View style={[Theme.colors.backgroundRed, { padding: 15, borderTopWidth: 1}]}>
+                <TouchableOpacity onPress={() => {
+                    setLogueado(false)
+                    Logout()
+                    AsyncStorage.clear()
+                }}
+                >
+                    <Text style={[Theme.colors.WhiteColor, Theme.styles.fs16, Theme.styles.bold, Theme.styles.textCenter]}>Cerrar Sesión</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }

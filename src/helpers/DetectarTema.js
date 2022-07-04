@@ -18,6 +18,7 @@ const DetectarTema = () => {
     const themeBorderActiveInput = colorScheme === 'light' ? Theme.colors.azul : Theme.colors.grisOcuro2;
     const themeBorderSelectionInput = colorScheme === 'light' ? Theme.colors.azul : Theme.colors.grisClaro;
     const themeBorderOutlineInput = colorScheme === 'light' ? Theme.colors.bordeTextInput : Theme.colors.grisOcuro2;
+    const themeDrawerNavigatorText = colorScheme === 'light' ? Theme.colors.azul : Theme.colors.blanco;
     return {
         themeTextStyle,
         themeContainerStyle,
@@ -31,7 +32,8 @@ const DetectarTema = () => {
         themeBordeSelectPicker,
         themeBorderActiveInput,
         themeBorderSelectionInput,
-        themeBorderOutlineInput
+        themeBorderOutlineInput,
+        themeDrawerNavigatorText,
     };
 }
 
