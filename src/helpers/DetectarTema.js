@@ -11,9 +11,13 @@ const DetectarTema = () => {
     const themeButtons = colorScheme === 'light' ? [Theme.styles.bordeAzul, Theme.styles.borde2] : [Theme.colors.backgroundBlanco, Theme.styles.borde1];
     const themeFormularios = colorScheme === 'light' ? Theme.colors.dark.darkContainer : Theme.colors.light.lightContainer;
     const themeTextFormularios = colorScheme === 'light' ? Theme.colors.dark.darkText : Theme.colors.light.lightText;
-    const themeCards = colorScheme === 'light' ? Theme.colors.backgroundBlanco : Theme.colors.backgroundGray3;
+    const themeCards = colorScheme === 'light' ? Theme.colors.backgroundBlanco : Theme.colors.backgroundGray4;
     const themeCardsText = colorScheme === 'light' ? '' : Theme.colors.dark.darkText;
     const themeGraficsText = colorScheme === 'light' ? Theme.colors.negro : Theme.colors.blanco;
+    const themeBordeSelectPicker = colorScheme === 'light' ? Theme.styles.bordeGris : Theme.styles.bordeGrisOscuro;
+    const themeBorderActiveInput = colorScheme === 'light' ? Theme.colors.azul : Theme.colors.grisOcuro2;
+    const themeBorderSelectionInput = colorScheme === 'light' ? Theme.colors.azul : Theme.colors.grisClaro;
+    const themeBorderOutlineInput = colorScheme === 'light' ? Theme.colors.bordeTextInput : Theme.colors.grisOcuro2;
     return {
         themeTextStyle,
         themeContainerStyle,
@@ -23,7 +27,11 @@ const DetectarTema = () => {
         themeTextFormularios,
         themeCards,
         themeCardsText,
-        themeGraficsText
+        themeGraficsText,
+        themeBordeSelectPicker,
+        themeBorderActiveInput,
+        themeBorderSelectionInput,
+        themeBorderOutlineInput
     };
 }
 

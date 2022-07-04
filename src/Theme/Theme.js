@@ -18,6 +18,7 @@ const Theme = {
         backgroundGray: { backgroundColor: '#dddfeb' },
         backgroundGray2: { backgroundColor: '#f8f9fc' },
         backgroundGray3: { backgroundColor: '#5A5C69' },
+        backgroundGray4: { backgroundColor: '#2B2B2B' },
         colorAzul: { color: '#1363DF' },
         colorGreen: { color: '#1CC88A' },
         colorGreenBlue: { color: '#36B9CC' },
@@ -26,6 +27,7 @@ const Theme = {
         backgroundBlue: {backgroundColor: '#1336DF'},
         colorAzul: { color: '#1363DF' },
         WhiteColor: {color: '#FFF'},
+        blackColor: {color: '#000'},
         blanco: '#FFF',
         negro: '#000',
         azul: '#1363DF',
@@ -33,6 +35,7 @@ const Theme = {
         naranja: '#F77F00',
         gris: '#5A5C69',
         grisOcuro: '#2B2B2B',
+        grisOcuro2: '#555',
         grisClaro: '#dddfeb',
         green: '#1CC88A',
         greenBlue: '#36B9CC',
@@ -119,6 +122,7 @@ const Theme = {
         bordeAzul: { borderColor: '#1363DF' },
         bordeBlanco: { borderColor: '#FFFFFF' },
         bordeGris: { borderColor: '#CCC' },
+        bordeGrisOscuro: { borderColor: '#444' },
         bordeRojo: { borderColor: '#F32424' },
 
         /** TAMAÑO DE BORDE **/
