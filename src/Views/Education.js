@@ -1,51 +1,128 @@
 import React, { useState, useEffect } from "react";
+import { SafeAreaView, Pressable, Text, ScrollView, Alert } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaView, Pressable, Text, ScrollView } from "react-native";
 import { Switch } from "react-native-paper";
+import { AntDesign } from '@expo/vector-icons';
+import { View } from "react-native-animatable";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
 import Theme from "../Theme/Theme";
 import DetectarTema from "../helpers/DetectarTema";
-import { AntDesign } from '@expo/vector-icons';
-import axios from "axios";
-import { View } from "react-native-animatable";
 import ModalEducation from "../components/ModalEducation";
 import EstudiosComponent from "../components/EstudiosComponent";
 import { useLogin } from '../context/LoginProvider';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import ObtenerYears from "../helpers/ObtenerYears";
 
 const Education = () => {
   const { themeContainerStyle, themeTextStyle, themeCards } = DetectarTema();
   const [modalVisible, setModalVisible] = useState(false);
   const [switchVisible, setSwitchVisible] = useState(false);
-  const [educacions, setEducacions] = useState([]);
+  const [educations, setEducations] = useState([]);
+  const [education, setEducation] = useState({})
   const [levels, setLevels] = useState([]);
+  const [btnVisible, setBtnVisible] = useState(false);
+  const { setLogueado } = useLogin();
   const [yearsList, setYearsList] = useState(ObtenerYears());
-  const { setLogueado } = useLogin()
-  useEffect(() => {
-    const obtenerEducacion = async () => {
-      try {
-        const respuesta = await axios.get('http://dev.creativolab.com.mx/api/v1/modules/education');
-        setEducacions(respuesta.data.degrees);
-        setLevels(respuesta.data.levels)
-        // setYearsList(respuesta.data.years)
-      } catch (error) {
-        if (error.response.data.status == 401) {
-          Alert.alert(
-            'No Autenticado',
-            'Parece que no estás autenticado, por favor, inicia sesión',
-            [{
-              text: 'Iniciar Sesión',
-              onPress: () => {
-                setLogueado(false);
-                AsyncStorage.clear();
-              }
-            }])
-        }
+
+  const obtenerEducacion = async () => {
+    try {
+      const respuesta = await axios.get('http://dev.creativolab.com.mx/api/v1/modules/education');
+      setEducations(respuesta.data.degrees);
+      setLevels(respuesta.data.levels)
+    } catch (error) {
+      if (error.response.data.status == 401) {
+        Alert.alert(
+          'No Autenticado',
+          'Parece que no estás autenticado, por favor, inicia sesión',
+          [{
+            text: 'Iniciar Sesión',
+            onPress: () => {
+              setLogueado(false);
+              AsyncStorage.clear();
+            }
+          }])
       }
     }
+  }
+  useEffect(() => {
     obtenerEducacion();
   }, [])
-  const onToggleSwitch = () => setSwitchVisible(!switchVisible);
+  const educationsTotal = educations.length;
+  useEffect(() => {
+    obtenerEducacion();
+    if(educationsTotal === 3){
+      setBtnVisible(true);
+    }else{
+      setBtnVisible(false);
+    }
+  }, [educations])
+
+  const getStudy = async id => {
+    setModalVisible(true);
+    try {
+      const respuesta = await axios.get(`http://dev.creativolab.com.mx/api/v1/modules/education/${id}`);
+      setEducation(respuesta.data.degree);
+    } catch (error) {
+      if (error.response.data.status == '401') {
+        Alert.alert(
+          'No Autenticado',
+          'Parece que no estás autenticado, por favor, inicia sesión',
+          [{
+            text: 'Iniciar Sesión',
+            onPress: () => {
+              setLogueado(false);
+              AsyncStorage.clear();
+            }
+          }])
+      } else if (error.response.data.status == 404) {
+        Alert.alert('Estudio no encontrado', 'Lo sentimos, el estudio no fue encontrado', [{ text: 'Ok' }])
+      }
+    }
+  }
+
+  const deleteEducation = id => {
+    Alert.alert('¿Deseas eliminar este estudio?',
+      'El estudio agregado se eliminará',
+      [{ text: 'No', style: 'cancel' },
+      {
+        text: 'Si, eliminar', onPress: async () => {
+          try {
+            await axios.delete(`http://dev.creativolab.com.mx/api/v1/modules/education`, { data: { id: parseInt(id) } })
+            const studyUpdated = educations.filter(studyState => studyState.id !== id);
+            setEducations(studyUpdated);
+          } catch (error) {
+            if (error.response.data.status == '401') {
+              Alert.alert(
+                'No Autenticado',
+                'Parece que no estás autenticado, por favor, inicia sesión',
+                [{
+                  text: 'Iniciar Sesión',
+                  onPress: () => {
+                    setLogueado(false);
+                    AsyncStorage.clear();
+                  }
+                }])
+            } else if (error.response.data.status == 404) {
+              Alert.alert('Estudio no encontrado', 'Lo sentimos, el estudio no fue encontrado', [{ text: 'Ok' }])
+            }
+
+          }
+        }
+      }
+      ])
+  }
+
+  const moduleEnable = async () => {
+    try {
+      const enable = {education_enabled: !switchVisible}
+      console.log(enable);
+      await axios.put('http://dev.creativolab.com.mx/api/v1/modules/education/toggle', enable);
+      setSwitchVisible(!switchVisible);
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  }
+
   return (
     <SafeAreaView style={[Theme.styles.flex1, themeContainerStyle]}>
       <StatusBar style='auto' />
@@ -53,7 +130,7 @@ const Education = () => {
         <Text style={[Theme.styles.fsTitle3, themeTextStyle, Theme.styles.bold]}>Estudios</Text>
         <Switch
           value={switchVisible}
-          onValueChange={onToggleSwitch}
+          onValueChange={moduleEnable}
           color={Theme.colors.azul}
           trackColor={{ false: Theme.colors.grisClaro, true: Theme.colors.grisClaro }}
         />
@@ -65,17 +142,20 @@ const Education = () => {
             <Pressable
               style={[Theme.colors.backgroundBlue, Theme.styles.pv10, Theme.styles.ph10, Theme.styles.mv20, Theme.styles.bordeRedondo1]}
               onPress={() => setModalVisible(true)}
+              disabled={btnVisible}
             >
               <Text style={[Theme.colors.WhiteColor, Theme.styles.fs15]}> <AntDesign name="plus" size={16} color='white' /> Añadir</Text>
             </Pressable>
           </View>
-          {educacions.length === 0 ? (
+          {educations.length === 0 ? (
             <Text style={[themeTextStyle, Theme.styles.textCenter, Theme.styles.mv60, Theme.styles.fs22]}>No hay registros existentes.</Text>
           ) : (
-            educacions.map(educacion => (
+            educations.map(education => (
               <EstudiosComponent
-                key={educacion.id}
-                educacions={educacion}
+                key={education.id}
+                educations={education}
+                deleteEducation={deleteEducation}
+                getStudy={getStudy}
               />
             )))}
         </View>
@@ -85,6 +165,11 @@ const Education = () => {
         setModalVisible={setModalVisible}
         levels={levels}
         yearsList={yearsList}
+        educations={educations}
+        setEducations={setEducations}
+        education={education}
+        setEducation={setEducation}
+        obtenerEducacion={obtenerEducacion}
       />
     </SafeAreaView>
   );
