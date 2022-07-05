@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
-import { Text, View, Modal, TouchableOpacity, TextInput, Pressable } from 'react-native'
+import { Text, View, Modal, TouchableOpacity, Pressable } from 'react-native'
 import Theme from '../Theme/Theme'
+import DetectarTema from '../helpers/DetectarTema';
+import TextInput from './TextInput';
 
 import { Feather } from '@expo/vector-icons';
 
 
 const ModalHabilidadesCategoria = ({ showModalCategory, setShowModalCategory }) => {
+    const { themeContainerStyle, themeCards, themeCardsText, themeBorderActiveInput, themeColorIcons, themeBorderOutlineInput, themeBorderSelectionInput } = DetectarTema();
     return (
 
         <View style={[Theme.styles.flex1]}>
@@ -17,14 +20,11 @@ const ModalHabilidadesCategoria = ({ showModalCategory, setShowModalCategory }) 
                 onRequestClose={() => {
                     setShowModalCategory(false);
                 }}
-                
             >
 
                 <View style={[{ backgroundColor: 'rgba(0,0,0,0.5)' }, Theme.styles.flex1, Theme.styles.justifyCenter, Theme.styles.alignCenter]}>
-                    <View style={[Theme.styles.bordeRedondo1, { backgroundColor: 'white', width: '90%' }]}>
-                        <View
-                            style={[Theme.styles.mv10]}
-                        >
+                    <View style={[Theme.styles.bordeRedondo1, themeContainerStyle, { width: '90%' }]}>
+                        <View>
                             <View style={[Theme.styles.flexRow, Theme.styles.alignCenter, Theme.styles.justifyCenter, { borderBottomWidth: 1, borderBottomColor: '#CCC', }]}>
                                 <View >
                                     <Text
@@ -32,7 +32,8 @@ const ModalHabilidadesCategoria = ({ showModalCategory, setShowModalCategory }) 
                                             Theme.styles.bold,
                                             Theme.styles.fs17,
                                             Theme.styles.mv10,
-                                            Theme.styles.textCenter
+                                            Theme.styles.textCenter,
+                                            themeCardsText
                                         ]}
                                     >
                                         Crear Categoría
@@ -40,26 +41,29 @@ const ModalHabilidadesCategoria = ({ showModalCategory, setShowModalCategory }) 
                                 </View>
                                 <View style={[Theme.styles.positionAbsolute, { right: 10, top: 10 }]}>
                                     <TouchableOpacity onPress={() => setShowModalCategory(!showModalCategory)}>
-                                        <Feather name="x" size={24} color="black" />
+                                        <Feather name="x" size={24} color={themeColorIcons} />
                                     </TouchableOpacity>
                                 </View>
                             </View>
                             <View style={{ borderBottomWidth: 1, borderBottomColor: '#CCC', }}>
-                                <View style={[Theme.styles.mh20,]}>
-                                    <View style={[Theme.styles.mv10]}>
-                                        <Text style={[Theme.styles.bold, Theme.styles.fs17]}>Categoría</Text>
+                                <View style={[Theme.styles.mh20, Theme.styles.mv20]}>
+                                    <View >
+                                        <Text style={[Theme.styles.bold, Theme.styles.fs17, themeCardsText]}>Categoría</Text>
                                     </View>
-                                    <View>
+                                    <View >
                                         <TextInput
-                                            placeholder="Categoría"
+                                            placeholder="Progreso"
                                             textAlign='center'
                                             mode="outlined"
-                                            selectionColor={Theme.colors.azul}
-                                            outlineColor={Theme.colors.bordeTextInput}
-                                            activeOutlineColor={Theme.colors.azul}
+                                            keyboardType='numeric'
+                                            selectionColor={themeBorderSelectionInput}
+                                            outlineColor={themeBorderOutlineInput}
+                                            activeOutlineColor={themeBorderActiveInput}
                                             returnKeyType='next'
                                             underlineColor="transparent"
-                                            style={[Theme.colors.backgroundBlanco, Theme.styles.borde1, Theme.styles.fs16, Theme.styles.mv20, Theme.styles.mt10, Theme.styles.bordeRedondo1]}
+                                            placeholderTextColor={Theme.colors.gris}
+                                            style={[Theme.styles.mt10, themeCards]}
+                                            theme={{ colors: { text: themeCardsText.color } }}
                                         />
                                     </View>
                                 </View>

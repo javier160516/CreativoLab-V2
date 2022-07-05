@@ -4,21 +4,22 @@ import { SafeAreaView, View, Text, Pressable } from 'react-native';
 import ModalHabilidadesCategoria from '../components/ModalHabilidadesCategoria';
 import ModalHabilidadesH from '../components/ModalHabilidadesH';
 import Theme from '../Theme/Theme';
-
+import DetectarTema from '../helpers/DetectarTema';
 
 
 const Skills = () => {
   const [showModalCategory, setShowModalCategory] = useState(false);
   const [showModalSkills, setShowModalSkills] = useState(false);
+  const {themeContainerStyle, themeCards, themeCardsText} = DetectarTema();
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={[themeContainerStyle, Theme.styles.flex1]}>
       <StatusBar style='auto' />
 
-      <View style={[Theme.styles.mh10, Theme.styles.flexRow, Theme.colors.backgroundBlanco, Theme.styles.mv30, Theme.styles.alignCenter, Theme.styles.justifyCenter]}>
+      <View style={[Theme.styles.mh20,Theme.styles.mv20 ,Theme.styles.bordeRedondo1,themeCards, Theme.styles.flexRow, Theme.styles.alignCenter, Theme.styles.justifyCenter]}>
         <View style={[Theme.styles.flex1, Theme.styles.mh10, Theme.styles.mv20]}>
-          <Text style={[Theme.styles.fs17, Theme.styles.semiBold, Theme.styles.mv10]}>Mis Categorías</Text>
-          <Text style={{ flexWrap: 'wrap' }}>
+          <Text style={[Theme.styles.fs17, Theme.styles.semiBold, Theme.styles.mv10, themeCardsText]}>Mis Categorías</Text>
+          <Text style={[ {flexWrap: 'wrap'}, themeCardsText ]}>
             Aquí puedes agregar las categorías de tus habilidades; por ejemplo, web, móvil, etc..
           </Text>
         </View>
@@ -30,10 +31,10 @@ const Skills = () => {
           </Pressable>
         </View>
       </View>
-      <View style={[Theme.styles.mh10, Theme.styles.flexRow, Theme.colors.backgroundBlanco, Theme.styles.mv30, Theme.styles.alignCenter, Theme.styles.justifyCenter]}>
+      <View style={[Theme.styles.mh20,Theme.styles.bordeRedondo1, Theme.styles.flexRow, themeCards, Theme.styles.alignCenter, Theme.styles.justifyCenter]}>
         <View style={[Theme.styles.flex1, Theme.styles.mh10, Theme.styles.mv20]}>
-          <Text style={[Theme.styles.fs17, Theme.styles.semiBold, Theme.styles.mv10]}>Mis habilidades</Text>
-          <Text style={{ flexWrap: 'wrap' }}>
+          <Text style={[Theme.styles.fs17, Theme.styles.semiBold, Theme.styles.mv10, themeCardsText]}>Mis habilidades</Text>
+          <Text style={[{ flexWrap: 'wrap' }, themeCardsText]}>
             Aquí puedes agregar las habilidades; por ejemplo, HTML 5, CSS, etc..
           </Text>
         </View>
