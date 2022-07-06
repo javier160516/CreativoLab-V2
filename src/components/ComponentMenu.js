@@ -25,8 +25,8 @@ const ComponentMenu = (props) => {
             </DrawerContentScrollView>
             <View style={[Theme.colors.backgroundRed, { padding: 15}]}>
                 <TouchableOpacity onPress={() => {
-                    setLogueado(false)
                     Logout()
+                    setLogueado(false)
                     AsyncStorage.clear()
                 }}
                 >

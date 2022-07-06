@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, Pressable, Text, ScrollView, Alert } from "react-native";
+import { SafeAreaView, Pressable, Text, ScrollView, Alert, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Switch } from "react-native-paper";
 import { AntDesign } from '@expo/vector-icons';
-import { View } from "react-native-animatable";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import Theme from "../Theme/Theme";
@@ -28,7 +27,8 @@ const Education = () => {
     try {
       const respuesta = await axios.get('http://dev.creativolab.com.mx/api/v1/modules/education');
       setEducations(respuesta.data.degrees);
-      setLevels(respuesta.data.levels)
+      setLevels(respuesta.data.levels);
+      
     } catch (error) {
       if (error.response.data.status == 401) {
         Alert.alert(
@@ -47,6 +47,7 @@ const Education = () => {
   useEffect(() => {
     obtenerEducacion();
   }, [])
+  
   const educationsTotal = educations.length;
   useEffect(() => {
     obtenerEducacion();

@@ -37,7 +37,6 @@ const Menu = () => {
                 drawerActiveBackgroundColor: Theme.colors.azul,
                 drawerActiveTintColor: Theme.colors.blanco,
                 drawerInactiveTintColor: themeColorIcons,
-                drawerInactiveTintColor: themeColorIcons,
             }}
         >
             <Drawer.Screen
@@ -47,37 +46,48 @@ const Menu = () => {
                     headerMode: 'screen',
                     headerTitleAlign: 'center',
                     headerTintColor: themeTextStyle.color,
-                    drawerIcon: () => (<AntDesign name="dashboard" size={24} color={themeColorIcons} />),
                     headerStyle: {
                         backgroundColor: themeContainerStyle.backgroundColor
                     },
-                                    }}
+                    drawerIcon: () => (<AntDesign name="dashboard" size={24} color={themeColorIcons} />),
+                }}
             />
             <Drawer.Screen
                 name="Estudios"
                 component={Education}
                 options={{
                     headerMode: 'screen',
-                    
                     headerTitleAlign: 'center',
                     headerTintColor: themeTextStyle.color,
-                    drawerIcon: () => (<FontAwesome5 name="graduation-cap" size={24} color={themeColorIcons} />),
                     headerStyle: {
                         backgroundColor: themeContainerStyle.backgroundColor
-                    }
-                }} />
+                    },
+                    drawerIcon: () => (<FontAwesome5 name="graduation-cap" size={24} color={themeColorIcons} />),
+                }}
+            />
             <Drawer.Screen
                 name="Habilidades"
                 component={Skills}
                 options={{
-                    drawerIcon: () => (<FontAwesome name="hand-scissors-o" size={24} color={themeColorIcons} />)
+                    headerMode: 'screen',
+                    headerTitleAlign: 'center',
+                    headerTintColor: themeTextStyle.color,
+                    headerStyle: {
+                        backgroundColor: themeContainerStyle.backgroundColor
+                    },
+                    drawerIcon: () => (<FontAwesome name="hand-scissors-o" size={24} color={themeColorIcons} />),
                 }}
             />
             <Drawer.Screen
                 name="Experiencia Laboral"
                 component={Experience}
                 options={{
-                    
+                    headerMode: 'screen',
+                    headerTitleAlign: 'center',
+                    headerTintColor: themeTextStyle.color,
+                    headerStyle: {
+                        backgroundColor: themeContainerStyle.backgroundColor
+                    },
                     drawerIcon: () => (<Entypo name="briefcase" size={24} color={themeColorIcons} />)
                 }}
             />
@@ -85,7 +95,12 @@ const Menu = () => {
                 name="Servicio"
                 component={Services}
                 options={{
-                    
+                    headerMode: 'screen',
+                    headerTitleAlign: 'center',
+                    headerTintColor: themeTextStyle.color,
+                    headerStyle: {
+                        backgroundColor: themeContainerStyle.backgroundColor
+                    },
                     drawerIcon: () => (<FontAwesome5 name="building" size={24} color={themeColorIcons} />)
                 }}
             />
@@ -93,10 +108,13 @@ const Menu = () => {
                 name="Testimonios"
                 component={Tesmonials}
                 options={{
-                    
+                    headerMode: 'screen',
+                    headerTitleAlign: 'center',
+                    headerTintColor: themeTextStyle.color,
+                    headerStyle: {
+                        backgroundColor: themeContainerStyle.backgroundColor
+                    },
                     drawerIcon: () => (<Fontisto name="persons" size={24} color={themeColorIcons} />)
-
-
                 }}
             />
         </Drawer.Navigator>
