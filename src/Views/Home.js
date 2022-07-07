@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
 import { AntDesign } from '@expo/vector-icons';
 
+
 import { Entypo } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -18,6 +19,7 @@ import Experience from './Experience';
 import Services from './Services';
 import Testimonials from './Testimonials';
 import ComponentMenu from '../components/ComponentMenu';
+import Portfolio from './Portfolio';
 
 import DetectarTema from '../helpers/DetectarTema';
 import Theme from '../Theme/Theme';
@@ -116,6 +118,19 @@ const Menu = () => {
                         backgroundColor: themeContainerStyle.backgroundColor
                     },
                     drawerIcon: () => (<Fontisto name="persons" size={24} color={themeColorIcons} />)
+                }}
+            />
+            <Drawer.Screen
+                name="Portfolio"
+                component={Portfolio}
+                options={{
+                    headerMode: 'screen',
+                    headerTitleAlign: 'center',
+                    headerTintColor: themeTextStyle.color,
+                    headerStyle: {
+                        backgroundColor: themeContainerStyle.backgroundColor
+                    },
+                    drawerIcon: () => (<AntDesign name="folderopen" size={24} color={themeColorIcons} />)
                 }}
             />
         </Drawer.Navigator>
