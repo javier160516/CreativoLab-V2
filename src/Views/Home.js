@@ -16,7 +16,7 @@ import Dashboard from './Dashboard';
 import Skills from './Skills';
 import Experience from './Experience';
 import Services from './Services';
-import Tesmonials from './Tesmonials';
+import Testimonials from './Testimonials';
 import ComponentMenu from '../components/ComponentMenu';
 
 import DetectarTema from '../helpers/DetectarTema';
@@ -77,6 +77,7 @@ const Menu = () => {
                     },
                     drawerIcon: () => (<FontAwesome name="hand-scissors-o" size={24} color={themeColorIcons} />),
                 }}
+                
             />
             <Drawer.Screen
                 name="Experiencia Laboral"
@@ -106,7 +107,7 @@ const Menu = () => {
             />
             <Drawer.Screen
                 name="Testimonios"
-                component={Tesmonials}
+                component={Testimonials}
                 options={{
                     headerMode: 'screen',
                     headerTitleAlign: 'center',
