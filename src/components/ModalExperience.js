@@ -35,7 +35,6 @@ const ModalExperience = ({ modalVisible, setModalVisible, experiences, setExperi
             ended_at: endedAt,
             details: details
         }
-        console.log(createExperience);
         const config = {
             headers: {
                 "Content-Type": "application/json"
@@ -107,7 +106,7 @@ const ModalExperience = ({ modalVisible, setModalVisible, experiences, setExperi
             <View style={[Theme.styles.flex1, themeCards]}>
                 <ScrollView>
                     <Text style={[Theme.styles.fs22, Theme.styles.textCenter, Theme.styles.mt40, Theme.styles.mb20, Theme.styles.semiBold, themeCardsText]}>
-                        Agrega Tu Experiencia Laboral
+                        {experience.id ? 'Edita Tu Experiencia Laboral' : 'Agrega Tu Experiencia Laboral'}
                     </Text>
                     <View style={[Theme.styles.mh30, Theme.styles.mv30]}>
                         <View style={[Theme.styles.mb10]}>
@@ -230,7 +229,9 @@ const ModalExperience = ({ modalVisible, setModalVisible, experiences, setExperi
                                 style={[Theme.styles.flex1, Theme.colors.backgroundBlue, Theme.styles.bordeRedondo1, Theme.styles.mh10]}
                                 onPress={() => handleSubmit()}
                             >
-                                <Text style={[Theme.colors.WhiteColor, Theme.styles.bold, Theme.styles.fs17, Theme.styles.textCenter, Theme.styles.mv10]}>Guardar</Text>
+                                <Text style={[Theme.colors.WhiteColor, Theme.styles.bold, Theme.styles.fs17, Theme.styles.textCenter, Theme.styles.mv10]}>
+                                    {experience.id ? 'Editar' : 'Guardar'}
+                                </Text>
                             </Pressable>
                         </View>
                     </View>

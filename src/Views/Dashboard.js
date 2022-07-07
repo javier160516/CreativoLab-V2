@@ -17,7 +17,8 @@ const Dashboard = () => {
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
-        await axios.get('http://dev.creativolab.com.mx/api/v1/dashboard');
+        const response = await axios.get('http://dev.creativolab.com.mx/api/v1/dashboard');
+        console.log(response.data);
       } catch (error) {
         if (error.response.data.status == 401) {
           Alert.alert(
