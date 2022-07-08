@@ -26,7 +26,7 @@ const Education = () => {
   const obtenerEducacion = async () => {
     try {
       const respuesta = await axios.get('http://dev.creativolab.com.mx/api/v1/modules/education');
-      setEducations(respuesta.data.degrees);
+      setEducations(respuesta.data.studies);
       setLevels(respuesta.data.levels);
       
     } catch (error) {
