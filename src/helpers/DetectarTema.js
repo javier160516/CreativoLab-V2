@@ -19,6 +19,8 @@ const DetectarTema = () => {
     const themeBorderSelectionInput = colorScheme === 'light' ? Theme.colors.azul : Theme.colors.grisClaro;
     const themeBorderOutlineInput = colorScheme === 'light' ? Theme.colors.bordeTextInput : Theme.colors.grisOcuro2;
     const themeDrawerNavigatorText = colorScheme === 'light' ? Theme.colors.azul : Theme.colors.blanco;
+    const themeCardsHabilidades = colorScheme === 'light' ? Theme.colors.backgroundGray5 : Theme.styles.backgroundGray5;
+    const themeBorderHabilidades = colorScheme === 'light' ? {borderColor: '#CCC'} : {borderColor: '#444'};
     return {
         themeTextStyle,
         themeContainerStyle,
@@ -34,6 +36,8 @@ const DetectarTema = () => {
         themeBorderSelectionInput,
         themeBorderOutlineInput,
         themeDrawerNavigatorText,
+        themeCardsHabilidades,
+        themeBorderHabilidades
     };
 }
 

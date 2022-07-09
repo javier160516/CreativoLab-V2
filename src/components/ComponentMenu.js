@@ -14,7 +14,6 @@ const ComponentMenu = (props) => {
     const { themeTextStyle, themeContainerStyle } = DetectarTema();
     const {firstNameUser, firstLastNameUser} = props;
     const avatarName = `${firstNameUser.substr(0,1)}${firstLastNameUser.substr(0,1)}`;
-    console.log(avatarName.toUpperCase());
     return (
         <View style={[Theme.styles.flex1, themeContainerStyle]}>
             <View style={[Theme.styles.alignCenter, Theme.styles.pt80, Theme.styles.pb40, { backgroundColor: Theme.colors.azul }]}>

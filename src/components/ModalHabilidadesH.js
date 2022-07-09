@@ -6,7 +6,7 @@ import { Feather } from '@expo/vector-icons';
 import DetectarTema from '../helpers/DetectarTema';
 import TextInput from './TextInput';
 
-const ModalHabilidadesH = ({ showModalSkills, setShowModalSkills }) => {
+const ModalHabilidadesH = ({ showModal, setShowModal }) => {
     const [selectNivel, setSelectNivel] = useState('');
     const { themeCardsText, themeBorderSelectionInput, themeBorderOutlineInput, themeBorderActiveInput, themeCards, themeContainerStyle, themeColorIcons, themeBordeSelectPicker } = DetectarTema();
     return (
@@ -15,9 +15,9 @@ const ModalHabilidadesH = ({ showModalSkills, setShowModalSkills }) => {
             // style={[Theme.styles.alignCenter, Theme.styles.justifyCenter]}
             animationType="fade"
             transparent={true}
-            visible={showModalSkills}
+            visible={showModal}
             onRequestClose={() => {
-                setShowModalSkills(false);
+                setShowModal(false);
             }}
         >
 
@@ -41,7 +41,7 @@ const ModalHabilidadesH = ({ showModalSkills, setShowModalSkills }) => {
                                 </Text>
                             </View>
                             <View style={[Theme.styles.positionAbsolute, { right: 10, top: 10 }]}>
-                                <TouchableOpacity onPress={() => setShowModalSkills(!showModalSkills)}>
+                                <TouchableOpacity onPress={() => setShowModal(false)}>
                                     <Feather name="x" size={24} color={themeColorIcons} />
                                 </TouchableOpacity>
                             </View>

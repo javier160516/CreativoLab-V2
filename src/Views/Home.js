@@ -47,7 +47,7 @@ const Menu = () => {
                 setSecondLastNameUser(response.data.user.second_last_name);
 
             } catch (error) {
-                console.log(error);
+                console.log(error.response.data.status);
             }
         }
         obtenerDatos();
