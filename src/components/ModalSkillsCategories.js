@@ -10,7 +10,7 @@ import axios from 'axios';
 import { useLogin } from '../context/LoginProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ModalHabilidadesCategoria = ({ showModal, setShowModal, listCategories, setListCategories, categorySelected, setCategorySelected }) => {
+const ModalSkillsCategories = ({ showModal, setShowModal, listCategories, setListCategories, categorySelected, setCategorySelected }) => {
     const { themeCards, themeCardsText, themeBorderActiveInput, themeColorIcons, themeBorderOutlineInput, themeBorderSelectionInput } = DetectarTema();
     const [nameCategory, setNameCategory] = useState({ value: '', error: '' });
     const { setLogueado } = useLogin();
@@ -171,4 +171,4 @@ const ModalHabilidadesCategoria = ({ showModal, setShowModal, listCategories, se
     )
 }
 
-export default ModalHabilidadesCategoria
+export default ModalSkillsCategories

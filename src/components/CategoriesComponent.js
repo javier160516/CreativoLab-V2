@@ -4,12 +4,12 @@ import { Card } from 'react-native-paper'
 import DetectarTema from '../helpers/DetectarTema'
 import Theme from '../Theme/Theme'
 import { FontAwesome } from '@expo/vector-icons';
-import ModalHabilidadesCategoria from './ModalHabilidadesCategoria'
-import Categoria from './Categoria'
+import ModalSkillsCategories from './ModalSkillsCategories'
+import Category from './Category'
 import axios from 'axios'
 import { useLogin } from '../context/LoginProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const CategoriasComponent = ({ listCategories, setListCategories, categorySelected, setCategorySelected }) => {
+const CategoriesComponent = ({ listCategories, setListCategories, categorySelected, setCategorySelected }) => {
     const [showModal, setShowModal] = useState(false);
     const { themeCards, themeCardsText } = DetectarTema();
     const { setLogueado } = useLogin();
@@ -97,7 +97,7 @@ const CategoriasComponent = ({ listCategories, setListCategories, categorySelect
                     } else if (error.response.data.status == 404) {
                         Alert.alert('Estudio no encontrado', 'Lo sentimos, el estudio no fue encontrado', [{ text: 'Ok' }])
                     } else {
-                        Alert.alert('Lo sentimos', 'Hubo un error, por')
+                        Alert.alert('Lo sentimos', 'Hubo un error, por favor, intentelo más tarde', [{text: 'Ok'}])
                     }
                 }
             }
@@ -106,7 +106,7 @@ const CategoriasComponent = ({ listCategories, setListCategories, categorySelect
 
     return (
         <Card style={[Theme.styles.mh20, Theme.styles.mv20, Theme.styles.bordeRedondo1, themeCards, Theme.styles.pt10, Theme.styles.pb20]} elevation={5}>
-            <View style={[Theme.styles.flexRow, Theme.styles.alignCenter, Theme.styles.justifyCenter]}>
+            <View style={[Theme.styles.flexRow, Theme.styles.alignCenter, Theme.styles.justifyCenter, Theme.styles.mb10]}>
                 <View style={[Theme.styles.flex1, Theme.styles.mh10]}>
                     <Text style={[Theme.styles.fs17, Theme.styles.semiBold, Theme.styles.mv10, themeCardsText]}>Mis Categorías</Text>
                     <Text style={[{ flexWrap: 'wrap' }, themeCardsText]}>
@@ -122,14 +122,14 @@ const CategoriasComponent = ({ listCategories, setListCategories, categorySelect
                 </View>
             </View>
             {listCategories.map(categories => (
-                <Categoria
+                <Category
                     key={categories.id}
                     categories={categories}
                     getCategory={getCategory}
                     deleteCategory={deleteCategory}
                 />
             ))}
-            <ModalHabilidadesCategoria
+            <ModalSkillsCategories
                 showModal={showModal}
                 setShowModal={setShowModal}
                 listCategories={listCategories}
@@ -141,4 +141,4 @@ const CategoriasComponent = ({ listCategories, setListCategories, categorySelect
     )
 }
 
-export default CategoriasComponent
+export default CategoriesComponent

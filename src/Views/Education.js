@@ -28,7 +28,7 @@ const Education = () => {
       const respuesta = await axios.get('http://dev.creativolab.com.mx/api/v1/modules/education');
       setEducations(respuesta.data.studies);
       setLevels(respuesta.data.levels);
-      
+
     } catch (error) {
       if (error.response.data.status == 401) {
         Alert.alert(
@@ -47,13 +47,13 @@ const Education = () => {
   useEffect(() => {
     obtenerEducacion();
   }, [])
-  
+
   const educationsTotal = educations.length;
   useEffect(() => {
     obtenerEducacion();
-    if(educationsTotal === 3){
+    if (educationsTotal === 3) {
       setBtnVisible(true);
-    }else{
+    } else {
       setBtnVisible(false);
     }
   }, [educations])
@@ -115,12 +115,24 @@ const Education = () => {
 
   const moduleEnable = async () => {
     try {
-      const enable = {education_enabled: !switchVisible}
-      console.log(enable);
+      const enable = { education_enabled: !switchVisible }
       await axios.put('http://dev.creativolab.com.mx/api/v1/modules/education/toggle', enable);
       setSwitchVisible(!switchVisible);
     } catch (error) {
-      console.log(error.response.data);
+      if (error.response.data.status == 401) {
+        Alert.alert(
+          'No Autenticado',
+          'Parece que no estás autenticado, por favor, inicia sesión',
+          [{
+            text: 'Iniciar Sesión',
+            onPress: () => {
+              setLogueado(false);
+              AsyncStorage.clear();
+            }
+          }])
+      } else {
+        Alert.alert('¡Hubo un error!', 'Lo sentimos, por favor, intente más tarde', [{ text: 'Ok' }]);
+      }
     }
   }
 
