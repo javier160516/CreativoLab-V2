@@ -27,47 +27,9 @@ import Portfolio from './Portfolio';
 
 const Drawer = createDrawerNavigator();
 
-const Menu = () => {
-    const { themeTextStyle, themeColorIcons, themeContainerStyle, themeDrawerNavigatorText } = DetectarTema();
-    const [modules, setModules] = useState([]);
-    const [firstNameUser, setFirstNameUser] = useState('');
-    const [middleNameUser, setMiddleNameUser] = useState('');
-    const [firstLastNameUser, setFirstLastNameUser] = useState('');
-    const [secondLastNameUser, setSecondLastNameUser] = useState('');
-
-    const [moduleEducation, setModuleEducation] = useState(0);
-    const [moduleSkills, setModuleSkills] = useState(0);
-    const [moduleExperiences, setModuleExperiences] = useState(0);
-    const [moduleProducts, setModuleProducts] = useState(0);
-    const [moduleServices, setModuleServices] = useState(0);
-    const [modulePortfolio, setModulePortfolio] = useState(0);
-    const [moduleTestimonials, setModuleTestimonials] = useState(0);
-
-
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const response = await axios.get('http://dev.creativolab.com.mx/api/v1/dashboard');
-                console.log(response.data);
-                setModules(response.data.modules);
-                setFirstNameUser(response.data.user.first_name);
-                setMiddleNameUser(response.data.user.middle_name);
-                setFirstLastNameUser(response.data.user.first_last_name);
-                setSecondLastNameUser(response.data.user.second_last_name);
-                //Modules enabled
-                setModuleEducation(response.data.is_education_enabled);
-                setModuleSkills(response.data.are_skills_enabled);
-                setModuleExperiences(response.data.are_experiences_enabled);
-                setModuleProducts(response.data.are_products_enabled);
-                setModuleServices(response.data.are_services_enabled);
-                setModulePortfolio(response.data.is_portfolio_enabled);
-                setModuleTestimonials(response.data.are_testimonials_enabled);
-            } catch (error) {
-                console.log(error.response.data.status);
-            }
-        }
-        getData();
-    }, [])
+const Menu = ({modules, firstNameUser, firstLastNameUser, modulesEnable}) => {
+    const { themeTextStyle, themeColorIcons, themeContainerStyle } = DetectarTema();
+    
     return (
         <Drawer.Navigator
             useLegacyImplementation
@@ -98,7 +60,7 @@ const Menu = () => {
             <Drawer.Screen
                 name="Estudios"
                 component={Education}
-                moduleEducation={moduleEducation}
+                initialParams={{enable: modulesEnable.educationEnable}}
                 options={{
                     headerMode: 'screen',
                     headerTitleAlign: 'center',
@@ -112,7 +74,8 @@ const Menu = () => {
             <Drawer.Screen
                 name="Habilidades"
                 component={Skills}
-                moduleSkills={moduleSkills}
+                // moduleSkills={moduleSkills}
+                // initialParams={moduleSkills}
                 options={{
                     headerMode: 'screen',
                     headerTitleAlign: 'center',
@@ -127,7 +90,7 @@ const Menu = () => {
             <Drawer.Screen
                 name="Experiencia Laboral"
                 component={Experience}
-                moduleExperiences={moduleExperiences}
+                // moduleExperiences={moduleExperiences}
                 options={{
                     headerMode: 'screen',
                     headerTitleAlign: 'center',
@@ -142,7 +105,7 @@ const Menu = () => {
                 <Drawer.Screen
                     name="Servicio"
                     component={Services}
-                    moduleServices={moduleServices}
+                    // moduleServices={moduleServices}
                     key={module}
                     options={{
                         headerMode: 'screen',
@@ -160,7 +123,7 @@ const Menu = () => {
                 <Drawer.Screen
                     name="Productos"
                     component={Products}
-                    moduleProducts={moduleProducts}
+                    // moduleProducts={moduleProducts}
                     key={module}
                     options={{
                         headerMode: 'screen',
@@ -178,7 +141,7 @@ const Menu = () => {
                 <Drawer.Screen
                     name="Portafolio"
                     component={Portfolio}
-                    modulePortfolio={modulePortfolio}
+                    // modulePortfolio={modulePortfolio}
                     key={module}
                     options={{
                         headerMode: 'screen',
@@ -196,7 +159,7 @@ const Menu = () => {
             <Drawer.Screen
                 name="Testimonios"
                 component={Testimonials}
-                moduleTestimonials={moduleTestimonials}
+                // moduleTestimonials={moduleTestimonials}
                 options={{
                     headerMode: 'screen',
                     headerTitleAlign: 'center',
@@ -214,6 +177,45 @@ const Menu = () => {
 
 const Home = () => {
     const { setLogueado } = useLogin();
+    const [modules, setModules] = useState([]);
+    const [firstNameUser, setFirstNameUser] = useState('');
+    const [middleNameUser, setMiddleNameUser] = useState('');
+    const [firstLastNameUser, setFirstLastNameUser] = useState('');
+    const [secondLastNameUser, setSecondLastNameUser] = useState('');
+    const [modulesEnable, setModulesEnable] = useState({
+        educationEnable: 0,
+        skillsEnable: 0,
+        experiencesEnable: 0,
+        productsEnable: 0,
+        servicesEnable: 0,
+        portfolioEnable: 0,
+        testimonialsEnable: 0,
+    });
+    
+    
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                const response = await axios.get('http://dev.creativolab.com.mx/api/v1/dashboard');
+                setModules(response.data.modules);
+                setFirstNameUser(response.data.user.first_name);
+                setMiddleNameUser(response.data.user.middle_name);
+                setFirstLastNameUser(response.data.user.first_last_name);
+                setSecondLastNameUser(response.data.user.second_last_name);
+                //Modules enabled
+                setModulesEnable({educationEnable: response.data.user.is_education_enabled});
+                setModulesEnable({skillsEnable: response.data.user.are_skills_enabled});
+                setModulesEnable({experiencesEnable: response.data.user.are_experiences_enabled});
+                setModulesEnable({productsEnable: response.data.user.are_products_enabled});
+                setModulesEnable({servicesEnable: response.data.user.are_services_enabled});
+                setModulesEnable({portfolioEnable: response.data.user.is_portfolio_enabled});
+                setModulesEnable({testimonialsEnable: response.data.user.are_testimonials_enabled});
+            } catch (error) {
+                console.log(error.response.data.status);
+            }
+        }
+        getData();
+    }, [])
     useEffect(() => {
         const backAction = () => {
             Alert.alert("Cerrar Sesión", "¿Desea cerrar sesión?", [
@@ -236,7 +238,12 @@ const Home = () => {
         return () => backHandler.remove();
     }, []);
     return (
-        <Menu />
+        <Menu 
+            modules={modules}
+            firstNameUser={firstNameUser}
+            firstLastNameUser={firstLastNameUser}
+            modulesEnable={modulesEnable}
+        />
     )
 }
 

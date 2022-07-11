@@ -41,6 +41,11 @@ const Skills = () => {
   }
   useEffect(() => {
     getCategories();
+    const getModuleEnable = async () => {
+      const response = await axios.get('http://dev.creativolab.com.mx/api/v1/dashboard');
+      response.data.user.are_skills_enabled === 1 ? setSwitchVisible(true) : setSwitchVisible(false);
+    }
+    getModuleEnable();
   }, [])
 
   useEffect(() => {

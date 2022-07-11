@@ -35,7 +35,6 @@ const CategoriesComponent = ({ listCategories, setListCategories, categorySelect
             } else if (error.response.data.status == 404) {
                 Alert.alert('¡Categoría no encontrada!', 'Lo sentimos, la categoría no está disponible', [{ text: 'Ok', onPress: () => setShowModal(false) }]);
             }
-            console.log(error.response.data.status);
         }
     }
 
