@@ -1,12 +1,17 @@
 import React, { useState } from 'react'
-import { Text, View, Modal, ScrollView, Pressable } from 'react-native'
+import { Text, View, Modal, ScrollView, Pressable, TouchableOpacity, Image } from 'react-native'
 import Theme from '../Theme/Theme'
 import DetectarTema from '../helpers/DetectarTema'
 import TextInput from './TextInput';
+import ComponentImage from './ComponentImage';
+
 
 
 
 const ModalTestimonials = ({ showModalTestimonials, setShowModalTestimonials }) => {
+    const [showComponentImage, setShowComponentImage] = useState(false);
+    const [image, setImage] = useState(null);
+    // const [imageCamera, setImageCamera] = useState(null);
     const { themeCards, themeCardsText, themeBorderActiveInput, themeBorderSelectionInput, themeBorderOutlineInput } = DetectarTema();
     return (
         <View>
@@ -24,6 +29,12 @@ const ModalTestimonials = ({ showModalTestimonials, setShowModalTestimonials }) 
 
                         <Text style={[Theme.styles.fs22, Theme.styles.textCenter, Theme.styles.mt40, Theme.styles.mb20, Theme.styles.semiBold, themeCardsText]}>Añadir Testimonio</Text>
                         <View style={[Theme.styles.mh20]}>
+                            <View style={[Theme.styles.alignCenter]}>
+                                <TouchableOpacity style={[Theme.colors.backgroundGray3, Theme.styles.pv30, Theme.styles.ph30, Theme.styles.mv20, Theme.styles.bordeRedondo1]}
+                                    onPress={() => setShowComponentImage(true)}>
+                                </TouchableOpacity>
+                                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+                            </View>
                             <View>
                                 <Text style={[themeCardsText, Theme.styles.fs17]}>
                                     Nombre
@@ -108,6 +119,15 @@ const ModalTestimonials = ({ showModalTestimonials, setShowModalTestimonials }) 
                     </ScrollView>
                 </View>
             </Modal>
+            <ComponentImage
+                showComponentImage={showComponentImage}
+                setShowComponentImage={setShowComponentImage}
+                image={image}
+                setImage={setImage}
+                // imageCamera={imageCamera}
+                // setImageCamera={setImageCamera}
+            />
+
         </View>
 
     )

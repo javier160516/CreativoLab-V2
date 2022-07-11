@@ -55,6 +55,7 @@ const Theme = {
         pv60: { paddingVertical: 60 },
         ph10: { paddingHorizontal: 10 },
         ph20: { paddingHorizontal: 20 },
+        ph30: {paddingHorizontal: 30},
         ph60: { paddingHorizontal: 60 },
         pb10: { paddingBottom: 10 },
         pb40: { paddingBottom: 40 },
