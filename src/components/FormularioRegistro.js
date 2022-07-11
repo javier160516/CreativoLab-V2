@@ -100,7 +100,6 @@ const FormularioRegistro = ({ navigation, codePhone, professions }) => {
                     ]);
             }, 1500);
         } catch (error) {
-            console.log(error.response.data);
             if (error.response.data.status === '400') {
                 Alert.alert('Error', 'El correo ingresado ya está asociado a una cuenta existente', [{ text: 'Ok' }]);
                 setLoader(false)

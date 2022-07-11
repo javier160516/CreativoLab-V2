@@ -45,6 +45,11 @@ const Experience = () => {
 
   useEffect(() => {
     getExperiences();
+    const getModuleEnable = async () => {
+      const response = await axios.get('http://dev.creativolab.com.mx/api/v1/dashboard');
+      response.data.user.are_experiences_enabled === 1 ? setSwitchVisible(true) : setSwitchVisible(false);
+    }
+    getModuleEnable();
   }, [])
 
   const experiencesTotal = experiences.length
@@ -63,7 +68,6 @@ const Experience = () => {
     try {
       const response = await axios.get(`http://dev.creativoLab.com.mx/api/v1/modules/experiences/${id}`);
       setExperience(response.data.experience);
-      console.log(response.data.experience);
     } catch (error) {
       if (error.response.data.status == '401') {
         Alert.alert(

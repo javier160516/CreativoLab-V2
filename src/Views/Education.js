@@ -12,16 +12,18 @@ import EstudiosComponent from "../components/EstudiosComponent";
 import { useLogin } from '../context/LoginProvider';
 import ObtenerYears from "../helpers/ObtenerYears";
 
-const Education = () => {
+const Education = (props) => {
   const { themeContainerStyle, themeTextStyle, themeCards } = DetectarTema();
   const [modalVisible, setModalVisible] = useState(false);
-  const [switchVisible, setSwitchVisible] = useState(false);
+  const [switchVisible, setSwitchVisible] = useState('');
   const [educations, setEducations] = useState([]);
   const [education, setEducation] = useState({})
   const [levels, setLevels] = useState([]);
   const [btnVisible, setBtnVisible] = useState(false);
   const { setLogueado } = useLogin();
   const [yearsList, setYearsList] = useState(ObtenerYears());
+  const [educationEnable, setEducationEnable] = useState(0)
+  
 
   const obtenerEducacion = async () => {
     try {
@@ -46,6 +48,11 @@ const Education = () => {
   }
   useEffect(() => {
     obtenerEducacion();
+    const getModuleEnable = async () => {
+      const response = await axios.get('http://dev.creativolab.com.mx/api/v1/dashboard');
+      response.data.user.is_education_enabled === 1 ? setSwitchVisible(true) : setSwitchVisible(false);
+    }
+    getModuleEnable();
   }, [])
 
   const educationsTotal = educations.length;

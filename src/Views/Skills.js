@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { SafeAreaView, ScrollView, View, Text } from 'react-native';
 import Theme from '../Theme/Theme';
 import DetectarTema from '../helpers/DetectarTema';
@@ -12,6 +12,45 @@ const Skills = () => {
   const [categorySelected, setCategorySelected] = useState({});
   const [switchVisible, setSwitchVisible] = useState(false)
   const { themeContainerStyle, themeCards, themeCardsText, themeTextStyle } = DetectarTema();
+
+
+  //GET CATEGORIES
+  const getCategories = async () => {
+    try {
+      const response = await axios.get('http://dev.creativolab.com.mx/api/v1/modules/skills/categories');
+      setListCategories(response.data.categories);
+    } catch (error) {
+      if (error.response.data.status == 401) {
+        Alert.alert(
+          'No Autenticado',
+          'Parece que no estás autenticado, por favor, inicia sesión',
+          [
+            {
+              text: 'Iniciar Sesión',
+              onPress: () => {
+                setLogueado(false);
+                AsyncStorage.clear();
+              }
+            }
+          ]
+        )
+      } else {
+        Alert.alert('¡Hubo un error!', 'Lo sentimos, por favor, intentelo más tarde', [{ text: 'Ok' }]);
+      }
+    }
+  }
+  useEffect(() => {
+    getCategories();
+    const getModuleEnable = async () => {
+      const response = await axios.get('http://dev.creativolab.com.mx/api/v1/dashboard');
+      response.data.user.are_skills_enabled === 1 ? setSwitchVisible(true) : setSwitchVisible(false);
+    }
+    getModuleEnable();
+  }, [])
+
+  useEffect(() => {
+    getCategories();
+  }, [listCategories])
 
   const moduleEnable = async () => {
     try {
@@ -54,7 +93,10 @@ const Skills = () => {
           categorySelected={categorySelected}
           setCategorySelected={setCategorySelected}
         />
-        <SkillsComponent />
+        <SkillsComponent 
+          listCategories={listCategories}
+          setListCategories={setListCategories}
+        />
       </ScrollView>
     </SafeAreaView>
 

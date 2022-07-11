@@ -9,10 +9,9 @@ import axios from 'axios'
 import { useLogin } from '../context/LoginProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SkillsComponent = () => {
+const SkillsComponent = ({listCategories, setListCategories}) => {
     const [showModal, setShowModal] = useState(false);
     const { themeCards, themeCardsText } = DetectarTema();
-    const [listCategories, setListCategories] = useState([])
     const [listSkills, setListSkills] = useState([])
     const [skill, setSkill] = useState({});
     const { setLogueado } = useLogin();
@@ -34,29 +33,6 @@ const SkillsComponent = () => {
     useEffect(() => {
         getSkills();
     }, [listSkills])
-
-    /** GET CATEGORIES **/
-    const getCategories = async () => {
-        try {
-            const response = await axios.get('http://dev.creativolab.com.mx/api/v1/modules/skills/categories');
-            setListCategories(response.data.categories);
-        } catch (error) {
-            if (error.reponse.data.status == 401) {
-                Alert.alert(
-                    'No Autenticado',
-                    'Parece que no estás autenticado, por favor, inicia sesión',
-                    [{
-                        text: 'Iniciar Sesión',
-                        onPress: () => {
-                            setLogueado(false);
-                            AsyncStorage.clear();
-                        }
-                    }])
-            } else {
-                Alert.alert('¡Hubo un error!', 'Lo sentimos, por favor, intente más tarde', [{ text: 'Ok', onPress: () => setShowModal(false) }])
-            }
-        }
-    }
 
     /** GET SKILL **/
     const getSkill = async (id) => {
@@ -144,7 +120,6 @@ const SkillsComponent = () => {
             <ModalSkills
                 showModal={showModal}
                 setShowModal={setShowModal}
-                getCategories={getCategories}
                 listCategories={listCategories}
                 listSkills={listSkills}
                 setListSkills={setListSkills}

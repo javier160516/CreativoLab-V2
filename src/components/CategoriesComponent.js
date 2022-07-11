@@ -13,41 +13,7 @@ const CategoriesComponent = ({ listCategories, setListCategories, categorySelect
     const [showModal, setShowModal] = useState(false);
     const { themeCards, themeCardsText } = DetectarTema();
     const { setLogueado } = useLogin();
-
-    //GET CATEGORIES
-    const getCategories = async () => {
-        try {
-            const response = await axios.get('http://dev.creativolab.com.mx/api/v1/modules/skills/categories');
-            setListCategories(response.data.categories);
-        } catch (error) {
-            if (error.response.data.status == 401) {
-                Alert.alert(
-                    'No Autenticado',
-                    'Parece que no estás autenticado, por favor, inicia sesión',
-                    [
-                        {
-                            text: 'Iniciar Sesión',
-                            onPress: () => {
-                                setLogueado(false);
-                                AsyncStorage.clear();
-                            }
-                        }
-                    ]
-                )
-            } else {
-                Alert.alert('¡Hubo un error!', 'Lo sentimos, por favor, intentelo más tarde', [{ text: 'Ok' }]);
-            }
-        }
-    }
-    useEffect(() => {
-        getCategories();
-    }, [])
-
-    useEffect(() => {
-        getCategories();
-    }, [listCategories])
-
-
+    
     //GET CATEGORY
     const getCategory = async (id) => {
         setShowModal(true);
@@ -69,7 +35,6 @@ const CategoriesComponent = ({ listCategories, setListCategories, categorySelect
             } else if (error.response.data.status == 404) {
                 Alert.alert('¡Categoría no encontrada!', 'Lo sentimos, la categoría no está disponible', [{ text: 'Ok', onPress: () => setShowModal(false) }]);
             }
-            console.log(error.response.data.status);
         }
     }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Pressable, View, ScrollView, Text, SafeAreaView } from 'react-native';
 import ModalTestimonials from '../components/ModalTestimonials';
 import DetectarTema from '../helpers/DetectarTema';
@@ -6,12 +6,22 @@ import Theme from '../Theme/Theme';
 import { StatusBar } from "expo-status-bar";
 import { Switch } from "react-native-paper";
 import { AntDesign } from '@expo/vector-icons';
+import axios from 'axios';
 
 const Testimonials = () => {
   const [showModalTestimonials, setShowModalTestimonials] = useState(false);
   const { themeButtons, themeContainerStyle, themeTextStyle, themeCards } = DetectarTema();
   const [switchVisible, setSwitchVisible] = useState(false);
   const onToggleSwitch = () => setSwitchVisible(!switchVisible);
+
+  useEffect(() => {
+    const getModuleEnable = async () => {
+      const response = await axios.get('http://dev.creativolab.com.mx/api/v1/dashboard');
+      response.data.user.are_testimonials_enabled === 1 ? setSwitchVisible(true) : setSwitchVisible(false);
+    }
+    getModuleEnable();
+  }, [])
+
   return (
     
      <SafeAreaView style={[Theme.styles.flex1, themeContainerStyle]}>
