@@ -9,7 +9,7 @@ import axios from 'axios';
 import { useLogin } from '../context/LoginProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ModalSkills = ({ showModal, setShowModal, getCategories, listCategories, listSkills, setListSkills, skill, setSkill }) => {
+const ModalSkills = ({ showModal, setShowModal, listCategories, listSkills, setListSkills, skill, setSkill }) => {
     const [nameSkill, setNameSkill] = useState({ value: '', error: '' });
     const [progress, setProgress] = useState({ value: '', error: '' });
     const [selectCategory, setSelectCategory] = useState('');
@@ -18,10 +18,6 @@ const ModalSkills = ({ showModal, setShowModal, getCategories, listCategories, l
     const { themeCardsText, themeBorderSelectionInput, themeBorderOutlineInput,
         themeBorderActiveInput, themeCards, themeColorIcons,
         themeBordeSelectPicker } = DetectarTema();
-
-    useEffect(() => {
-        getCategories();
-    }, [])
 
     useEffect(() => {
         if (skill?.id) {

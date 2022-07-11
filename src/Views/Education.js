@@ -12,7 +12,7 @@ import EstudiosComponent from "../components/EstudiosComponent";
 import { useLogin } from '../context/LoginProvider';
 import ObtenerYears from "../helpers/ObtenerYears";
 
-const Education = () => {
+const Education = (props) => {
   const { themeContainerStyle, themeTextStyle, themeCards } = DetectarTema();
   const [modalVisible, setModalVisible] = useState(false);
   const [switchVisible, setSwitchVisible] = useState(false);
@@ -22,6 +22,8 @@ const Education = () => {
   const [btnVisible, setBtnVisible] = useState(false);
   const { setLogueado } = useLogin();
   const [yearsList, setYearsList] = useState(ObtenerYears());
+
+  // console.log(props.moduleEducation);
 
   const obtenerEducacion = async () => {
     try {

@@ -35,22 +35,38 @@ const Menu = () => {
     const [firstLastNameUser, setFirstLastNameUser] = useState('');
     const [secondLastNameUser, setSecondLastNameUser] = useState('');
 
+    const [moduleEducation, setModuleEducation] = useState(0);
+    const [moduleSkills, setModuleSkills] = useState(0);
+    const [moduleExperiences, setModuleExperiences] = useState(0);
+    const [moduleProducts, setModuleProducts] = useState(0);
+    const [moduleServices, setModuleServices] = useState(0);
+    const [modulePortfolio, setModulePortfolio] = useState(0);
+    const [moduleTestimonials, setModuleTestimonials] = useState(0);
+
 
     useEffect(() => {
-        const obtenerDatos = async () => {
+        const getData = async () => {
             try {
                 const response = await axios.get('http://dev.creativolab.com.mx/api/v1/dashboard');
+                console.log(response.data);
                 setModules(response.data.modules);
                 setFirstNameUser(response.data.user.first_name);
                 setMiddleNameUser(response.data.user.middle_name);
                 setFirstLastNameUser(response.data.user.first_last_name);
                 setSecondLastNameUser(response.data.user.second_last_name);
-
+                //Modules enabled
+                setModuleEducation(response.data.is_education_enabled);
+                setModuleSkills(response.data.are_skills_enabled);
+                setModuleExperiences(response.data.are_experiences_enabled);
+                setModuleProducts(response.data.are_products_enabled);
+                setModuleServices(response.data.are_services_enabled);
+                setModulePortfolio(response.data.is_portfolio_enabled);
+                setModuleTestimonials(response.data.are_testimonials_enabled);
             } catch (error) {
                 console.log(error.response.data.status);
             }
         }
-        obtenerDatos();
+        getData();
     }, [])
     return (
         <Drawer.Navigator
@@ -82,6 +98,7 @@ const Menu = () => {
             <Drawer.Screen
                 name="Estudios"
                 component={Education}
+                moduleEducation={moduleEducation}
                 options={{
                     headerMode: 'screen',
                     headerTitleAlign: 'center',
@@ -95,6 +112,7 @@ const Menu = () => {
             <Drawer.Screen
                 name="Habilidades"
                 component={Skills}
+                moduleSkills={moduleSkills}
                 options={{
                     headerMode: 'screen',
                     headerTitleAlign: 'center',
@@ -109,6 +127,7 @@ const Menu = () => {
             <Drawer.Screen
                 name="Experiencia Laboral"
                 component={Experience}
+                moduleExperiences={moduleExperiences}
                 options={{
                     headerMode: 'screen',
                     headerTitleAlign: 'center',
@@ -123,6 +142,7 @@ const Menu = () => {
                 <Drawer.Screen
                     name="Servicio"
                     component={Services}
+                    moduleServices={moduleServices}
                     key={module}
                     options={{
                         headerMode: 'screen',
@@ -140,6 +160,7 @@ const Menu = () => {
                 <Drawer.Screen
                     name="Productos"
                     component={Products}
+                    moduleProducts={moduleProducts}
                     key={module}
                     options={{
                         headerMode: 'screen',
@@ -157,6 +178,7 @@ const Menu = () => {
                 <Drawer.Screen
                     name="Portafolio"
                     component={Portfolio}
+                    modulePortfolio={modulePortfolio}
                     key={module}
                     options={{
                         headerMode: 'screen',
@@ -165,7 +187,7 @@ const Menu = () => {
                         headerStyle: {
                             backgroundColor: themeContainerStyle.backgroundColor
                         },
-                        drawerIcon: () => (<FontAwesome5 name="building" size={24} color={themeColorIcons} />)
+                        drawerIcon: () => (<Entypo name="briefcase" size={24} color={themeColorIcons} />)
                     }}
                 />
             ) : null)}
@@ -174,6 +196,7 @@ const Menu = () => {
             <Drawer.Screen
                 name="Testimonios"
                 component={Testimonials}
+                moduleTestimonials={moduleTestimonials}
                 options={{
                     headerMode: 'screen',
                     headerTitleAlign: 'center',
