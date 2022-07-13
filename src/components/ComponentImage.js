@@ -60,7 +60,10 @@ const ComponentImage = ({ showComponentImage, setShowComponentImage, image, setI
                         <Pressable onPress={pickImage2} style={[Theme.styles.mv10 ,Theme.styles.bordeRedondo1, Theme.colors.backgroundBlue]}>
                             <Text style={[Theme.styles.pv10,Theme.colors.WhiteColor, Theme.styles.fs15, Theme.styles.semiBold, Theme.styles.textCenter]}>Tomar una Foto</Text>
                         </Pressable>
-                        <Pressable style={[Theme.styles.mv10,Theme.alignCenter, Theme.styles.justifyCenter,Theme.styles.bordeRedondo1,Theme.colors.backgroundRed]} onPress={() => setShowComponentImage(!showComponentImage)}>
+                        <Pressable style={[Theme.styles.mv10,Theme.alignCenter, Theme.styles.justifyCenter,Theme.styles.bordeRedondo1,Theme.colors.backgroundRed]} 
+                        onPress={() => setShowComponentImage(!showComponentImage)}
+                        
+                        >
                             <Text style={[Theme.styles.pv10,Theme.styles.textCenter,Theme.colors.WhiteColor, Theme.styles.fs16]}>Cancelar</Text>
                         </Pressable>
                     </View>
