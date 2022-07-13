@@ -111,6 +111,7 @@ const Theme = {
         fsTitle2: { fontSize: 30 },
         fsTitle3: { fontSize: 25 },
         /** ANCHO DEL TEXTO **/
+        normal: { fontWeight: '400' },
         bold: { fontWeight: '900' },
         semiBold: { fontWeight: '700' },
         /** POSICIONES **/
