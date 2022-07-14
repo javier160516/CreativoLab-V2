@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, Pressable, Text, ScrollView, Alert, View } from "react-native";
+import { SafeAreaView, Pressable, Text, ScrollView, Alert, View, RefreshControl } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Switch } from "react-native-paper";
 import { AntDesign } from '@expo/vector-icons';
@@ -12,7 +12,11 @@ import { useLogin } from '../context/LoginProvider';
 import ObtenerYears from "../helpers/ObtenerYears";
 import ModalEducation from "../components/Education/ModalEducation";
 
-const Education = (props) => {
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
+
+const Education = () => {
   const { themeContainerStyle, themeTextStyle, themeCards } = DetectarTema();
   const [modalVisible, setModalVisible] = useState(false);
   const [switchVisible, setSwitchVisible] = useState('');
@@ -23,14 +27,14 @@ const Education = (props) => {
   const { setLogueado } = useLogin();
   const [yearsList, setYearsList] = useState(ObtenerYears());
   const [educationEnable, setEducationEnable] = useState(0)
-  
+  const [refreshing, setRefreshing] = useState(false);
 
-  const obtenerEducacion = async () => {
+  const getEducations = async () => {
     try {
-      const respuesta = await axios.get('http://dev.creativolab.com.mx/api/v1/modules/education');
-      setEducations(respuesta.data.studies);
-      setLevels(respuesta.data.levels);
-
+      const response = await axios.get('http://dev.creativolab.com.mx/api/v1/modules/education');
+      setEducations(response.data.studies);
+      setLevels(response.data.levels);
+      response.data.module_status === 1 ? setSwitchVisible(true) : setSwitchVisible(false);
     } catch (error) {
       if (error.response.data.status == 401) {
         Alert.alert(
@@ -47,29 +51,14 @@ const Education = (props) => {
     }
   }
   useEffect(() => {
-    obtenerEducacion();
-    const getModuleEnable = async () => {
-      const response = await axios.get('http://dev.creativolab.com.mx/api/v1/dashboard');
-      response.data.user.is_education_enabled === 1 ? setSwitchVisible(true) : setSwitchVisible(false);
-    }
-    getModuleEnable();
+    getEducations();
   }, [])
-
-  const educationsTotal = educations.length;
-  useEffect(() => {
-    obtenerEducacion();
-    if (educationsTotal === 3) {
-      setBtnVisible(true);
-    } else {
-      setBtnVisible(false);
-    }
-  }, [educations])
 
   const getStudy = async id => {
     setModalVisible(true);
     try {
       const respuesta = await axios.get(`http://dev.creativolab.com.mx/api/v1/modules/education/${id}`);
-      setEducation(respuesta.data.degree);
+      setEducation(respuesta.data.study);
     } catch (error) {
       if (error.response.data.status == '401') {
         Alert.alert(
@@ -95,11 +84,14 @@ const Education = (props) => {
       {
         text: 'Si, eliminar', onPress: async () => {
           try {
-            await axios.delete(`http://dev.creativolab.com.mx/api/v1/modules/education`, { data: { id: parseInt(id) } })
-            const studyUpdated = educations.filter(studyState => studyState.id !== id);
-            setEducations(studyUpdated);
+            const response = await axios.delete(`http://dev.creativolab.com.mx/api/v1/modules/education`, { data: { id: parseInt(id) } })
+            if (response.data.status == 200) {
+              const studyUpdated = educations.filter(studyState => studyState.id !== id);
+              setEducations(studyUpdated);
+              Alert.alert('¡Modal Eliminado!', 'El modal ha sido eliminado correctamente', [{ text: 'Ok' }]);
+            }
           } catch (error) {
-            if (error.response.data.status == '401') {
+            if (error.response.data.status == 401) {
               Alert.alert(
                 'No Autenticado',
                 'Parece que no estás autenticado, por favor, inicia sesión',
@@ -123,8 +115,11 @@ const Education = (props) => {
   const moduleEnable = async () => {
     try {
       const enable = { education_enabled: !switchVisible }
-      await axios.put('http://dev.creativolab.com.mx/api/v1/modules/education/toggle', enable);
-      setSwitchVisible(!switchVisible);
+      const response = await axios.put('http://dev.creativolab.com.mx/api/v1/modules/education/toggle', enable);
+      if (response.data.status == 200) {
+        Alert.alert('Cambio Exitoso', response.data.message, [{ text: 'Ok' }]);
+        setSwitchVisible(!switchVisible);
+      }
     } catch (error) {
       if (error.response.data.status == 401) {
         Alert.alert(
@@ -143,6 +138,14 @@ const Education = (props) => {
     }
   }
 
+  //Refrescar Registros
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setEducations([]);
+    getEducations();
+    wait(1000).then(() => setRefreshing(false));
+  }, []);
+
   return (
     <SafeAreaView style={[Theme.styles.flex1, themeContainerStyle]}>
       <StatusBar style='auto' />
@@ -155,7 +158,9 @@ const Education = (props) => {
           trackColor={{ false: Theme.colors.grisClaro, true: Theme.colors.grisClaro }}
         />
       </View>
-      <ScrollView>
+      <ScrollView
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
         <View style={[Theme.styles.mh10, Theme.styles.mt10, Theme.styles.mb20, themeCards]}>
           <View style={[Theme.styles.flexRow, Theme.styles.alignCenter, Theme.styles.justifyBetween, Theme.styles.mh20]}>
             <Text style={[Theme.styles.fs20, themeTextStyle, Theme.styles.bold]}>Mis Estudios</Text>
@@ -189,7 +194,7 @@ const Education = (props) => {
         setEducations={setEducations}
         education={education}
         setEducation={setEducation}
-        obtenerEducacion={obtenerEducacion}
+        getEducations={getEducations}
       />
     </SafeAreaView>
   );
