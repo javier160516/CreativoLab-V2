@@ -5,14 +5,15 @@ import DetectarTema from '../helpers/DetectarTema'
 import TextInput from './TextInput';
 import ComponentImage from './ComponentImage';
 import { Entypo } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from "expo-status-bar";
 import { Button } from 'react-native-paper';
 import { useLogin } from '../context/LoginProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-const ModalTestimonials = ({ showModal, setShowModal, listTestimonial, setListTestimonials, testimonial, setTestimonial }) => {
-    const { themeCards, themeCardsText, themeBorderActiveInput, themeBorderSelectionInput, themeBorderOutlineInput, themeFormularios, themeColorIconsModals } = DetectarTema();
+
+const ModalTestimonials = ({ showModal, setShowModal, setListTestimonials, testimonial, setTestimonial, getTestimonials }) => {
+    const { themeCards, themeCardsText, themeBorderActiveInput, themeBorderSelectionInput, themeBorderOutlineInput,
+        themeFormularios, themeColorIconsModals, themeColorIcons } = DetectarTema();
     const [showComponentImage, setShowComponentImage] = useState(false);
     const [image, setImage] = useState('');
     const [fullName, setFullName] = useState({ value: '', error: '' });
@@ -21,7 +22,6 @@ const ModalTestimonials = ({ showModal, setShowModal, listTestimonial, setListTe
     const [comment, setComment] = useState({ value: '', error: '' });
     const [loader, setLoader] = useState(false);
     const { setLogueado } = useLogin();
-
     useEffect(() => {
         if (testimonial?.id) {
             setFullName({ value: testimonial.full_name, error: '' });
@@ -32,9 +32,8 @@ const ModalTestimonials = ({ showModal, setShowModal, listTestimonial, setListTe
         }
     }, [testimonial])
 
-
     const handleSubmit = async () => {
-        // setLoader(true);
+        setLoader(true);
         const FormData = global.FormData;
         const createTestimonial = new FormData();
         createTestimonial.append('full_name', fullName.value);
@@ -47,13 +46,10 @@ const ModalTestimonials = ({ showModal, setShowModal, listTestimonial, setListTe
             trimURL = (Platform.OS === 'android') ? image : image.replace("file://", "");
             nameImage = trimURL.split('/').pop();
             createTestimonial.append('photo', { uri: trimURL, name: nameImage, type: 'image/jpeg' || 'image/png' });
-        } else {
-            createTestimonial.append('photo', { uri: '', name: '', type: '' });
         }
 
         if (testimonial.id) {
             createTestimonial.append('id', testimonial.id);
-            console.log(createTestimonial);
             try {
                 const response = await axios({
                     url: 'http://dev.creativolab.com.mx/api/v1/modules/testimonials',
@@ -72,6 +68,7 @@ const ModalTestimonials = ({ showModal, setShowModal, listTestimonial, setListTe
                     setTestimonial({});
                 }
             } catch (error) {
+                setLoader(false)
                 if (error.response.data.status == 400) {
                     setFullName({ ...fullName, error: error.response.data.errors.full_name });
                     setPosition({ ...position, error: error.response.data.errors.position });
@@ -113,10 +110,10 @@ const ModalTestimonials = ({ showModal, setShowModal, listTestimonial, setListTe
                 })
                 if (response.data.status == 201) {
                     Alert.alert('¡Testimonial Creado!', 'El testimonial se ha creado correctamente', [{ text: 'Ok', onPress: () => clearFields() }])
-                    setListTestimonials([])
+                    setListTestimonials([]);
                 }
             } catch (error) {
-                console.log(error.response)
+                setLoader(false)
                 if (error.response.data.status == 400) {
                     setFullName({ ...fullName, error: error.response.data.errors.full_name });
                     setPosition({ ...position, error: error.response.data.errors.position });
@@ -138,11 +135,10 @@ const ModalTestimonials = ({ showModal, setShowModal, listTestimonial, setListTe
                         }])
                 } else if (error.response.data.status == 403) {
                     Alert.alert('¡Error!', 'Solo puedes crear 5 testimoniales', [{ text: 'Ok', onPress: () => clearFields() }]);
-                } else {
-                    Alert.alert('¡Error!', 'Lo sentimos, por favor, intente más tarde', [{ text: 'Ok', onPress: () => clearFields() }]);
                 }
             }
         }
+        getTestimonials();
     }
 
     const clearFields = () => {
@@ -152,6 +148,8 @@ const ModalTestimonials = ({ showModal, setShowModal, listTestimonial, setListTe
         setCompany({ value: '', error: '' });
         setComment({ value: '', error: '' });
         setImage(null);
+        setLoader(false);
+
     }
 
     return (
@@ -165,7 +163,8 @@ const ModalTestimonials = ({ showModal, setShowModal, listTestimonial, setListTe
         >
             <StatusBar style='auto' />
             <View style={[themeCards, Theme.styles.flex1]}>
-                <ScrollView >
+                <ScrollView>
+
                     <Text style={[Theme.styles.fs22, Theme.styles.textCenter, Theme.styles.mt40, Theme.styles.mb20, Theme.styles.semiBold, themeCardsText]}>Añadir Testimonio</Text>
                     <View style={[Theme.styles.mh20]}>
                         <View style={[Theme.styles.alignCenter]}>
@@ -173,9 +172,11 @@ const ModalTestimonials = ({ showModal, setShowModal, listTestimonial, setListTe
                                 <TouchableOpacity style={[Theme.styles.mv20]}
                                     onPress={() => setShowComponentImage(true)}>
                                     {image ? (
-                                        <View>
+                                        <View style={Theme.styles.alignCenter}>
                                             <Image source={{ uri: image }} style={{ width: 150, height: 150, borderRadius: 10 }} />
-                                            <Text style={[Theme.colors.WhiteColor, Theme.styles.backgroundBlue]}>Subir otra imagen</Text>
+                                            <Button mode='outlined' color={themeColorIcons} style={[Theme.styles.mv10]}>
+                                                <Text style={[Theme.styles.WhiteColor]}>Subir otra imagen</Text>
+                                            </Button>
                                         </View>
                                     ) : (
                                         <View style={[themeFormularios, Theme.styles.pv10, Theme.styles.ph10, Theme.styles.bordeRedondo1]}>

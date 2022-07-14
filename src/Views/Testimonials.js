@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Pressable, View, ScrollView, Text, SafeAreaView, Alert } from 'react-native';
+import { Pressable, View, ScrollView, Text, SafeAreaView, Alert, RefreshControl } from 'react-native';
 import ModalTestimonials from '../components/ModalTestimonials';
 import DetectarTema from '../helpers/DetectarTema';
 import Theme from '../Theme/Theme';
@@ -10,31 +10,27 @@ import axios from 'axios';
 import Testimonial from '../components/Testimonial';
 import { useLogin } from '../context/LoginProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
 
 const Testimonials = () => {
   const [showModal, setShowModal] = useState(false);
   const [switchVisible, setSwitchVisible] = useState(false);
   const [listTestimonials, setListTestimonials] = useState([]);
   const [testimonial, setTestimonial] = useState({});
+  const [refreshing, setRefreshing] = useState(false);
   const { themeButtons, themeContainerStyle, themeTextStyle, themeCards, themeBorderTestimonials } = DetectarTema();
   const { setLogueado } = useLogin();
   useEffect(() => {
     getTestimonials();
-    const getModuleEnable = async () => {
-      const response = await axios.get('http://dev.creativolab.com.mx/api/v1/dashboard');
-      response.data.user.are_testimonials_enabled === 1 ? setSwitchVisible(true) : setSwitchVisible(false);
-    }
-    getModuleEnable();
   }, [])
-
-  useEffect(() => {
-    getTestimonials();
-  }, [listTestimonials])
 
   const getTestimonials = async () => {
     try {
       const response = await axios.get('http://dev.creativolab.com.mx/api/v1/modules/testimonials');
       setListTestimonials(response.data.testimonials);
+      response.data.module_status === 1 ? setSwitchVisible(true) : setSwitchVisible(false);
     } catch (error) {
       if (error.response.data.status == 401) {
         Alert.alert(
@@ -53,10 +49,10 @@ const Testimonials = () => {
 
   const getTestimonial = async (id) => {
     setShowModal(true);
-    try{
+    try {
       const response = await axios.get(`http://dev.creativolab.com.mx/api/v1/modules/testimonials/${id}`);
       setTestimonial(response.data.testimonial);
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
   }
@@ -93,8 +89,8 @@ const Testimonials = () => {
         onPress: async () => {
           try {
             const response = await axios.delete('http://dev.creativolab.com.mx/api/v1/modules/testimonials', { data: { id: parseInt(id) } });
-            if(response.data.status == 200){
-              Alert.alert('¡Testimonial Eliminado!', 'El registro se ha eliminado correctamente', [{text: 'Ok'}]);
+            if (response.data.status == 200) {
+              Alert.alert('¡Testimonial Eliminado!', 'El registro se ha eliminado correctamente', [{ text: 'Ok' }]);
             }
             const testimonialsUpdated = listTestimonials.filter(testimonialState => testimonialState.id !== id);
             setListTestimonials(testimonialsUpdated);
@@ -118,6 +114,13 @@ const Testimonials = () => {
       }
       ])
   }
+  //Refrescar Registros
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setListTestimonials([]);
+    getTestimonials();
+    wait(1000).then(() => setRefreshing(false));
+  }, []);
 
   return (
 
@@ -132,7 +135,9 @@ const Testimonials = () => {
           trackColor={{ false: Theme.colors.grisClaro, true: Theme.colors.grisClaro }}
         />
       </View>
-      <ScrollView>
+      <ScrollView
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
         <View style={[Theme.styles.mh20, Theme.styles.mb20, Theme.styles.mt10, Theme.styles.bordeRedondo1, themeCards, Theme.styles.pt10, Theme.styles.pb20, Theme.styles.borde1, themeBorderTestimonials]}>
           <View style={[Theme.styles.mh20, Theme.styles.mb20]}>
             <View style={[Theme.styles.flexRow, Theme.styles.alignCenter, Theme.styles.justifyBetween]}>
@@ -147,7 +152,7 @@ const Testimonials = () => {
             </View>
             <Text style={[themeTextStyle, Theme.styles.fs15]}>
               Este módulo es una recopilación de todos los testimonio que posees.
-              La cantidad máxima de testimonio que puededs agregar son 4.
+              La cantidad máxima de testimonio que puedes agregar son 5.
             </Text>
           </View>
           {listTestimonials.map(testimonials => (
@@ -167,7 +172,7 @@ const Testimonials = () => {
         setListTestimonials={setListTestimonials}
         testimonial={testimonial}
         setTestimonial={setTestimonial}
-
+        getTestimonials={getTestimonials}
       />
     </SafeAreaView>
 

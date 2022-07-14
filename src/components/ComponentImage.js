@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import * as ImagePicker from 'expo-image-picker';
-import { Text, Pressable, View, Platform, Image, Modal } from 'react-native';
-// import { Entypo } from '@expo/vector-icons';
+import { Text, Pressable, View, Modal } from 'react-native';
 import Theme from '../Theme/Theme';
 import DetectarTema from '../helpers/DetectarTema';
-const ComponentImage = ({ showComponentImage, setShowComponentImage, image, setImage }) => {
-    const { themeCardsText, themeCards, themeContainerStyle } = DetectarTema();
+const ComponentImage = ({ showComponentImage, setShowComponentImage, setImage }) => {
+    const { themeCardsText, themeCards } = DetectarTema();
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -13,7 +12,6 @@ const ComponentImage = ({ showComponentImage, setShowComponentImage, image, setI
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
-
         });
 
         if (!result.cancelled) {
@@ -35,7 +33,6 @@ const ComponentImage = ({ showComponentImage, setShowComponentImage, image, setI
             setImage(result.uri);
             setShowComponentImage(false);
         }
-
     };
 
     return (
@@ -63,7 +60,6 @@ const ComponentImage = ({ showComponentImage, setShowComponentImage, image, setI
                             <Text style={[Theme.styles.pv10,Theme.styles.textCenter,Theme.colors.WhiteColor, Theme.styles.fs16]}>Cancelar</Text>
                         </Pressable>
                     </View>
-
                 </View>
             </View>
         </Modal >
