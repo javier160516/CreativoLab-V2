@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from 'expo-status-bar';
-import Theme from '../Theme/Theme';
-import { Modal, Text, Pressable, View, ScrollView, FlatList, StyleSheet, Alert } from "react-native";
+import Theme from '../../Theme/Theme';
+import { Modal, Text, Pressable, View, ScrollView, FlatList, StyleSheet, Alert, ActivityIndicator } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import TextInput from './TextInput';
-import DetectarTema from "../helpers/DetectarTema";
+import TextInput from '../TextInput';
+import DetectarTema from "../../helpers/DetectarTema";
 import axios from 'axios';
 const ModalEducation = ({ modalVisible, setModalVisible, levels, yearsList, educations, setEducations, education, setEducation }) => {
   const { themeContainerStyle, themeCardsText, themeCards, themeBordeSelectPicker, themeBorderActiveInput, themeBorderSelectionInput,
@@ -14,7 +14,8 @@ const ModalEducation = ({ modalVisible, setModalVisible, levels, yearsList, educ
   const [institute, setInstitute] = useState({ value: '', error: '' });
   const [startedAt, setStartedAt] = useState(0);
   const [endedAt, setEndedAt] = useState(0);
-  const [details, setDetails] = useState('')
+  const [details, setDetails] = useState('');
+  const [loader, setLoader] = useState(false);
 
   const [levelError, setLevelError] = useState('');
   const [startedAtError, setStartedAtError] = useState('');
@@ -256,6 +257,7 @@ const ModalEducation = ({ modalVisible, setModalVisible, levels, yearsList, educ
                 />
               </View>
               {/* Botones de Cancelar y Guardar */}
+              {loader ? <ActivityIndicator animating={true} color={Theme.colors.azul} size="large" /> : <></>}
               <View style={[Theme.styles.flexRow, Theme.styles.mv30,]}>
                 <Pressable style={[Theme.styles.flex1,
                 Theme.colors.backgroundRed,

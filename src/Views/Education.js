@@ -7,10 +7,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import Theme from "../Theme/Theme";
 import DetectarTema from "../helpers/DetectarTema";
-import ModalEducation from "../components/ModalEducation";
-import EstudiosComponent from "../components/EstudiosComponent";
+import EducationComponent from "../components/Education/EducationComponent";
 import { useLogin } from '../context/LoginProvider';
 import ObtenerYears from "../helpers/ObtenerYears";
+import ModalEducation from "../components/Education/ModalEducation";
 
 const Education = (props) => {
   const { themeContainerStyle, themeTextStyle, themeCards } = DetectarTema();
@@ -171,7 +171,7 @@ const Education = (props) => {
             <Text style={[themeTextStyle, Theme.styles.textCenter, Theme.styles.mv60, Theme.styles.fs22]}>No hay registros existentes.</Text>
           ) : (
             educations.map(education => (
-              <EstudiosComponent
+              <EducationComponent
                 key={education.id}
                 educations={education}
                 deleteEducation={deleteEducation}
