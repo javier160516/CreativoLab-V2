@@ -107,7 +107,7 @@ const Experience = () => {
                 }
               }])
           } else if (error.response.data.status == 404) {
-            Alert.alert('Estudio no encontrado', 'Lo sentimos, el estudio no fue encontrado', [{ text: 'Ok' }])
+            Alert.alert('Experiencia no encontrada', 'Lo sentimos, este registro no fue encontrado', [{ text: 'Ok' }])
           }
         }
       }

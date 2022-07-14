@@ -1,42 +1,38 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import * as ImagePicker from 'expo-image-picker';
-import { Text, Pressable, View, Platform, Image, Modal } from 'react-native';
-// import { Entypo } from '@expo/vector-icons';
+import { Text, Pressable, View, Modal } from 'react-native';
 import Theme from '../Theme/Theme';
 import DetectarTema from '../helpers/DetectarTema';
-const ComponentImage = ({ showComponentImage, setShowComponentImage, image, setImage }) => {
-    const { themeCardsText, themeCards, themeContainerStyle } = DetectarTema();
-
+const ComponentImage = ({ showComponentImage, setShowComponentImage, setImage }) => {
+    const { themeCardsText, themeCards } = DetectarTema();
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
         });
 
-        // console.log(result);
-
         if (!result.cancelled) {
             setImage(result.uri);
+            setShowComponentImage(false);
         }
 
     };
     const pickImage2 = async () => {
         let result = await ImagePicker.launchCameraAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
-        });
 
-        // console.log(result);
+        });
 
         if (!result.cancelled) {
             setImage(result.uri);
+            setShowComponentImage(false);
         }
-
     };
 
     return (
@@ -54,10 +50,10 @@ const ComponentImage = ({ showComponentImage, setShowComponentImage, image, setI
                         <Text style={[themeCardsText, Theme.styles.bold, Theme.styles.fs17]}>Agregar una Foto o Imagen</Text>
                     </View>
                     <View style={[Theme.styles.mh10]}>
-                        <Pressable onPress={pickImage} style={[Theme.styles.mv10,Theme.colors.backgroundBlue, Theme.styles.bordeRedondo1]}>
+                        <Pressable onPress={() => pickImage()} style={[Theme.styles.mv10,Theme.colors.backgroundBlue, Theme.styles.bordeRedondo1]}>
                             <Text style={[Theme.styles.pv10, Theme.styles.semiBold, Theme.styles.fs15, Theme.styles.textCenter,  Theme.colors.WhiteColor]}>Buscar en Galeria</Text>
                         </Pressable>
-                        <Pressable onPress={pickImage2} style={[Theme.styles.mv10 ,Theme.styles.bordeRedondo1, Theme.colors.backgroundBlue]}>
+                        <Pressable onPress={() => pickImage2()} style={[Theme.styles.mv10 ,Theme.styles.bordeRedondo1, Theme.colors.backgroundBlue]}>
                             <Text style={[Theme.styles.pv10,Theme.colors.WhiteColor, Theme.styles.fs15, Theme.styles.semiBold, Theme.styles.textCenter]}>Tomar una Foto</Text>
                         </Pressable>
                         <Pressable style={[Theme.styles.mv10,Theme.alignCenter, Theme.styles.justifyCenter,Theme.styles.bordeRedondo1,Theme.colors.backgroundRed]} 
@@ -67,7 +63,6 @@ const ComponentImage = ({ showComponentImage, setShowComponentImage, image, setI
                             <Text style={[Theme.styles.pv10,Theme.styles.textCenter,Theme.colors.WhiteColor, Theme.styles.fs16]}>Cancelar</Text>
                         </Pressable>
                     </View>
-
                 </View>
             </View>
         </Modal >

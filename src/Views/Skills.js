@@ -6,13 +6,16 @@ import DetectarTema from '../helpers/DetectarTema';
 import CategoriesComponent from '../components/CategoriesComponent';
 import SkillsComponent from '../components/SkillsComponent';
 import { Switch } from 'react-native-paper';
+import { useLogin } from '../context/LoginProvider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+
 const Skills = () => {
   const [listCategories, setListCategories] = useState([]);
   const [categorySelected, setCategorySelected] = useState({});
   const [switchVisible, setSwitchVisible] = useState(false)
   const { themeContainerStyle, themeCards, themeCardsText, themeTextStyle } = DetectarTema();
-
+  const { setLogueado } = useLogin();
 
   //GET CATEGORIES
   const getCategories = async () => {
