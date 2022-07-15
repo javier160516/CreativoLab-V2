@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, Pressable, Alert } from 'react-native'
 import { Card } from 'react-native-paper'
-import DetectarTema from '../helpers/DetectarTema'
-import Theme from '../Theme/Theme'
+import DetectarTema from '../../helpers/DetectarTema'
+import Theme from '../../Theme/Theme'
 import { FontAwesome } from '@expo/vector-icons';
 import ModalSkillsCategories from './ModalSkillsCategories'
 import Category from './Category'
 import axios from 'axios'
-import { useLogin } from '../context/LoginProvider';
+import { useLogin } from '../../context/LoginProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const CategoriesComponent = ({ listCategories, setListCategories, categorySelected, setCategorySelected }) => {
+const CategoriesComponent = ({ listCategories, setListCategories, categorySelected, setCategorySelected, getCategories, getSkills }) => {
     const [showModal, setShowModal] = useState(false);
     const { themeCards, themeCardsText } = DetectarTema();
     const { setLogueado } = useLogin();
@@ -19,7 +19,9 @@ const CategoriesComponent = ({ listCategories, setListCategories, categorySelect
         setShowModal(true);
         try {
             const response = await axios.get(`http://dev.creativolab.com.mx/api/v1/modules/skills/categories/${id}`);
-            setCategorySelected(response.data.category);
+            if(response.data.status == 200){
+                setCategorySelected(response.data.category);
+            }
         } catch (error) {
             if (error.response.data.status == 401) {
                 Alert.alert(
@@ -43,10 +45,13 @@ const CategoriesComponent = ({ listCategories, setListCategories, categorySelect
         Alert.alert('¿Deseas eliminar esta categoría?', 'Si eliminas esta categoría no se podrá recuperar', [{ text: 'No', style: 'cancel' }, {
             text: 'Si, Eliminar', onPress: async () => {
                 try {
-                    await axios.delete('http://dev.creativolab.com.mx/api/v1/modules/skills/categories', { data: { id: parseInt(id) } })
-                    Alert.alert('¡Categoria Eliminada!', 'La categoria se ha eliminado correctamente', [{ text: 'Ok' }]);
-                    const categoriesUpdated = listCategories.filter(categoriesState => categoriesState.id !== id);
-                    setListCategories(categoriesUpdated);
+                    const response = await axios.delete('http://dev.creativolab.com.mx/api/v1/modules/skills/categories', 
+                                                        { data: { id: parseInt(id) } });
+                    if(response.data.status == 200){
+                        Alert.alert('¡Categoria Eliminada!', 'La categoria se ha eliminado correctamente', [{ text: 'Ok' }]);
+                        getCategories();
+                        getSkills();
+                    }
                 } catch (error) {
                     if (error.response.data.status == 401) {
                         Alert.alert(
@@ -67,6 +72,7 @@ const CategoriesComponent = ({ listCategories, setListCategories, categorySelect
                 }
             }
         }])
+
     }
 
     return (
@@ -101,6 +107,7 @@ const CategoriesComponent = ({ listCategories, setListCategories, categorySelect
                 setListCategories={setListCategories}
                 categorySelected={categorySelected}
                 setCategorySelected={setCategorySelected}
+                getCategories={getCategories}
             />
         </Card>
     )

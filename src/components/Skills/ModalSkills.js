@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, Modal, TouchableOpacity, Pressable, Alert, StyleSheet } from 'react-native'
-import Theme from '../Theme/Theme'
+import { Text, View, Modal, TouchableOpacity, Pressable, Alert, StyleSheet, ActivityIndicator } from 'react-native'
+import Theme from '../../Theme/Theme'
 import { Picker } from "@react-native-picker/picker";
 import { Feather } from '@expo/vector-icons';
-import DetectarTema from '../helpers/DetectarTema';
-import TextInput from './TextInput';
+import DetectarTema from '../../helpers/DetectarTema';
+import TextInput from '../TextInput';
 import axios from 'axios';
-import { useLogin } from '../context/LoginProvider';
+import { useLogin } from '../../context/LoginProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ModalSkills = ({ showModal, setShowModal, listCategories, listSkills, setListSkills, skill, setSkill }) => {
+const ModalSkills = ({ showModal, setShowModal, listCategories, listSkills, setListSkills, skill, setSkill, getSkills }) => {
     const [nameSkill, setNameSkill] = useState({ value: '', error: '' });
     const [progress, setProgress] = useState({ value: '', error: '' });
     const [selectCategory, setSelectCategory] = useState('');
     const [selectCategoryError, setSelectCategoryError] = useState('');
+    const [loader, setLoader] = useState(false);
     const { setLogueado } = useLogin();
     const { themeCardsText, themeBorderSelectionInput, themeBorderOutlineInput,
         themeBorderActiveInput, themeCards, themeColorIcons,
@@ -28,6 +29,7 @@ const ModalSkills = ({ showModal, setShowModal, listCategories, listSkills, setL
     }, [skill])
 
     const handleSubmit = async () => {
+        setLoader(true);
         const createSkill = {
             skill: nameSkill.value,
             percentage: progress.value,
@@ -38,17 +40,20 @@ const ModalSkills = ({ showModal, setShowModal, listCategories, listSkills, setL
                 "Content-Type": "application/json"
             }
         }
-
+        /** EDIT SKILL **/
         if (skill.id) {
             createSkill.id = skill.id;
             try {
-                await axios.put('http://dev.creativolab.com.mx/api/v1/modules/skills', createSkill, config);
-                const skillsUpdated = listSkills.filter(skillState => skillState.id === createSkill.id ? createSkill : skillState);
-                setListSkills(skillsUpdated);
-                setSkill({});
-                Alert.alert('¡Habilidad Editada!', 'La habilidad ha sido editada correctamente', [{ text: 'Ok', onPress: () => clearStates() }]);
+                const response = await axios.put('http://dev.creativolab.com.mx/api/v1/modules/skills', createSkill, config);
+                if (response.data.status == 200) {
+                    setListSkills([]);
+                    setSkill({});
+                    Alert.alert('¡Habilidad Editada!', 'La habilidad ha sido editada correctamente', [{ text: 'Ok', onPress: () => clearStates() }]);
+                    setLoader(false)
+                }
 
             } catch (error) {
+                setLoader(false);
                 if (error.response.data.status == 400) {
                     setNameSkill({ ...nameSkill, error: error.response.data.errors.skill });
                     setProgress({ ...progress, error: error.response.data.errors.percentage });
@@ -72,11 +77,18 @@ const ModalSkills = ({ showModal, setShowModal, listCategories, listSkills, setL
                 }
             }
         } else {
+            /** CREACION SKILL **/
             try {
-                await axios.post('http://dev.creativolab.com.mx/api/v1/modules/skills', createSkill, config);
-                setListSkills([])
-                Alert.alert('¡Habilidad Creada!', 'La habilidad ha sido creada correctamente', [{ text: 'Ok', onPress: () => clearStates() }]);
+                const response = await axios.post('http://dev.creativolab.com.mx/api/v1/modules/skills', createSkill, config);
+                if (response.data.status == 201) {
+                    setListSkills([])
+                    Alert.alert('¡Habilidad Creada!',
+                        'La habilidad ha sido creada correctamente',
+                        [{ text: 'Ok', onPress: () => clearStates() }]);
+                    setLoader(false);
+                }
             } catch (error) {
+                setLoader(false);
                 if (error.response.data.status == 400) {
                     setNameSkill({ ...nameSkill, error: error.response.data.errors.skill });
                     setProgress({ ...progress, error: error.response.data.errors.percentage });
@@ -100,6 +112,7 @@ const ModalSkills = ({ showModal, setShowModal, listCategories, listSkills, setL
                 }
             }
         }
+        getSkills();
     }
 
     const clearStates = () => {
@@ -195,6 +208,7 @@ const ModalSkills = ({ showModal, setShowModal, listCategories, listSkills, setL
                             {selectCategoryError ? <Text style={styles.error}>{selectCategoryError}</Text> : null}
                         </View>
 
+                        {loader ? <ActivityIndicator animating={true} color={Theme.colors.azul} size="large" /> : <></>}
                         <View style={[Theme.styles.mv10, Theme.styles.flexRow]}>
                             <Pressable
                                 style={[Theme.styles.flex1, Theme.colors.backgroundRed, Theme.styles.bordeRedondo1, Theme.styles.mr10, Theme.styles.pv10]}

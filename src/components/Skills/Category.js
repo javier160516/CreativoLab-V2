@@ -1,7 +1,7 @@
 import { View, Text, Pressable } from 'react-native'
 import React from 'react'
-import Theme from '../Theme/Theme'
-import DetectarTema from '../helpers/DetectarTema'
+import Theme from '../../Theme/Theme'
+import DetectarTema from '../../helpers/DetectarTema'
 import { FontAwesome } from '@expo/vector-icons';
 import { Card } from 'react-native-paper';
 

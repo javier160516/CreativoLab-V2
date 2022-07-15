@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, Modal, TouchableOpacity, Pressable, Alert } from 'react-native'
-import Theme from '../Theme/Theme'
-import DetectarTema from '../helpers/DetectarTema';
-import TextInput from './TextInput';
+import { Text, View, Modal, TouchableOpacity, Pressable, Alert, ActivityIndicator } from 'react-native'
+import Theme from '../../Theme/Theme'
+import DetectarTema from '../../helpers/DetectarTema';
+import TextInput from '../TextInput';
 
 import { Feather } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import axios from 'axios';
-import { useLogin } from '../context/LoginProvider';
+import { useLogin } from '../../context/LoginProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ModalSkillsCategories = ({ showModal, setShowModal, listCategories, setListCategories, categorySelected, setCategorySelected }) => {
+const ModalSkillsCategories = ({ showModal, setShowModal, listCategories, setListCategories, categorySelected, setCategorySelected, getCategories }) => {
     const { themeCards, themeCardsText, themeBorderActiveInput, themeColorIcons, themeBorderOutlineInput, themeBorderSelectionInput } = DetectarTema();
     const [nameCategory, setNameCategory] = useState({ value: '', error: '' });
     const { setLogueado } = useLogin();
+    const [loader, setLoader] = useState(false);
 
     useEffect(() => {
         if (categorySelected?.id) {
@@ -23,6 +24,7 @@ const ModalSkillsCategories = ({ showModal, setShowModal, listCategories, setLis
 
     // ADD CATEGORY
     const handleSubmit = async () => {
+        setLoader(true);
         const createCategory = {
             category: nameCategory.value,
         }
@@ -34,17 +36,20 @@ const ModalSkillsCategories = ({ showModal, setShowModal, listCategories, setLis
         if (categorySelected.id) {
             createCategory.id = categorySelected.id;
             try {
-                await axios.put('http://dev.creativolab.com.mx/api/v1/modules/skills/categories', createCategory, config);
-                const categoriesUpdated = listCategories.map(listCategoriesState => listCategoriesState.id === createCategory.id ? createCategory : listCategoriesState);
-                setListCategories(categoriesUpdated);
-                setCategorySelected({})
-                Alert.alert('¡Categoría Editada!', 'La categoría ha sido editada correctamente', [{
-                    text: 'Ok', onPress: () => {
-                        setNameCategory({ value: '', error: '' });
-                        setShowModal(false);
-                    }
-                }]);
+                const response = await axios.put('http://dev.creativolab.com.mx/api/v1/modules/skills/categories', createCategory, config);
+                if (response.data.status == 200) {
+                    setListCategories([]);
+                    setCategorySelected({})
+                    Alert.alert('¡Categoría Editada!', 'La categoría ha sido editada correctamente', [{
+                        text: 'Ok', onPress: () => {
+                            setNameCategory({ value: '', error: '' });
+                            setShowModal(false);
+                        }
+                    }]);
+                    setLoader(false)
+                }
             } catch (error) {
+                setLoader(false);
                 if (error.response.data.status == 400) {
                     setNameCategory({ ...nameCategory, error: error.response.data.errors.category });
                 } else if (error.response.data.status == 401) {
@@ -58,20 +63,25 @@ const ModalSkillsCategories = ({ showModal, setShowModal, listCategories, setLis
                                 AsyncStorage.clear();
                             }
                         }])
-                } else if (error.response.data.status == 403) {
-                    Alert.alert('Lo sentimos', 'Solo se pueden agregar 5 categorías', [{ text: 'Ok' }])
+                } else if (error.response.data.status == 404) {
+                    Alert.alert('Lo sentimos', error.response.data.errors.id, [{ text: 'Ok' }])
                 } else {
                     Alert.alert('Lo sentimos', 'Hubo un error, por favor, intentelo más tarde', [{ text: 'Ok' }])
                 }
             }
         } else {
+            /** CREACION CATEGORIA **/
             try {
-                await axios.post('http://dev.creativolab.com.mx/api/v1/modules/skills/categories', createCategory, config);
-                Alert.alert('¡Categoría Agregada!', 'La categoría se ha agregado correctamente', [{ text: 'Ok' }]);
-                setListCategories([])
-                setShowModal(false);
-                setNameCategory({ value: '', error: '' });
+                const response = await axios.post('http://dev.creativolab.com.mx/api/v1/modules/skills/categories', createCategory, config);
+                if (response.data.status == 201) {
+                    Alert.alert('¡Categoría Agregada!', 'La categoría ha sido creada correctamente', [{ text: 'Ok' }]);
+                    setListCategories([])
+                    setShowModal(false);
+                    setNameCategory({ value: '', error: '' });
+                    setLoader(false)
+                }
             } catch (error) {
+                setLoader(false)
                 if (error.response.data.status == 400) {
                     setNameCategory({ ...nameCategory, error: error.response.data.errors.category });
                 } else if (error.response.data.status == 401) {
@@ -93,6 +103,7 @@ const ModalSkillsCategories = ({ showModal, setShowModal, listCategories, setLis
 
             }
         }
+        getCategories();
     }
 
     const cancelAdd = () => {
@@ -145,6 +156,7 @@ const ModalSkillsCategories = ({ showModal, setShowModal, listCategories, setLis
                                 errorText={nameCategory.error}
                             />
                         </View>
+                        {loader ? <ActivityIndicator animating={true} color={Theme.colors.azul} size="large" /> : <></>}
                         <View style={[Theme.styles.flexRow, Theme.styles.justifyCenter, Theme.styles.mv10]}>
                             <Pressable
                                 style={[Theme.styles.flex1, Theme.colors.backgroundRed, Theme.styles.bordeRedondo1, Theme.styles.pv10, { marginRight: 10 }]}

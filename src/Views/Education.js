@@ -86,9 +86,9 @@ const Education = () => {
           try {
             const response = await axios.delete(`http://dev.creativolab.com.mx/api/v1/modules/education`, { data: { id: parseInt(id) } })
             if (response.data.status == 200) {
-              const studyUpdated = educations.filter(studyState => studyState.id !== id);
-              setEducations(studyUpdated);
-              Alert.alert('¡Modal Eliminado!', 'El modal ha sido eliminado correctamente', [{ text: 'Ok' }]);
+              setEducations([]);
+              getEducations();
+              Alert.alert('¡Estudio Eliminado!', 'El Estudio ha sido eliminado correctamente', [{ text: 'Ok' }]);
             }
           } catch (error) {
             if (error.response.data.status == 401) {
@@ -132,6 +132,8 @@ const Education = () => {
               AsyncStorage.clear();
             }
           }])
+      }else if(error.response.data.status == 403){
+        Alert.alert('¡Error!', error.response.data.message, [{text: 'Ok'}]);
       } else {
         Alert.alert('¡Hubo un error!', 'Lo sentimos, por favor, intente más tarde', [{ text: 'Ok' }]);
       }

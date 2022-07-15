@@ -1,38 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, Pressable, Alert } from 'react-native'
 import { Card } from 'react-native-paper'
-import DetectarTema from '../helpers/DetectarTema'
-import Theme from '../Theme/Theme'
+import DetectarTema from '../../helpers/DetectarTema'
+import Theme from '../../Theme/Theme'
 import ModalSkills from './ModalSkills'
 import Skill from './Skill'
 import axios from 'axios'
-import { useLogin } from '../context/LoginProvider';
+import { useLogin } from '../../context/LoginProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SkillsComponent = ({listCategories, setListCategories}) => {
+const SkillsComponent = ({ listCategories, setListCategories, listSkills, setListSkills, getSkills }) => {
     const [showModal, setShowModal] = useState(false);
     const { themeCards, themeCardsText } = DetectarTema();
-    const [listSkills, setListSkills] = useState([])
     const [skill, setSkill] = useState({});
     const { setLogueado } = useLogin();
-
-    /** GET SKILLS **/
-    const getSkills = async () => {
-        try {
-            const response = await axios.get('http://dev.creativolab.com.mx/api/v1/modules/skills');
-            setListSkills(response.data.skills);
-        } catch (error) {
-            console.log(error.response);
-        }
-    }
-
-    useEffect(() => {
-        getSkills()
-    }, [])
-
-    useEffect(() => {
-        getSkills();
-    }, [listSkills])
 
     /** GET SKILL **/
     const getSkill = async (id) => {
@@ -66,8 +47,8 @@ const SkillsComponent = ({listCategories, setListCategories}) => {
                 try {
                     await axios.delete('http://dev.creativolab.com.mx/api/v1/modules/skills', { data: { id: parseInt(id) } })
                     Alert.alert('¡Habilidad Eliminada!', 'La Habilidad se ha eliminado correctamente', [{ text: 'Ok' }]);
-                    const skillsUpdated = listSkills.filter(skillsState => skillsState.id !== id);
-                    setListSkills(skillsUpdated);
+                    setListSkills([]);
+                    getSkills();
                 } catch (error) {
                     if (error.response.data.status == 401) {
                         Alert.alert(
@@ -125,6 +106,7 @@ const SkillsComponent = ({listCategories, setListCategories}) => {
                 setListSkills={setListSkills}
                 skill={skill}
                 setSkill={setSkill}
+                getSkills={getSkills}
             />
         </Card>
     )
