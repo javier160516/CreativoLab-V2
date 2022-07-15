@@ -1,26 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView, ScrollView, Button } from "react-native";
+import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView, ScrollView, Button, ActivityIndicator } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import Theme from '../Theme/Theme';
-import DetectarTema from "../helpers/DetectarTema";
-import TextInput from "./TextInput";
+import Theme from '../../Theme/Theme';
+import DetectarTema from "../../helpers/DetectarTema";
+import TextInput from "../TextInput";
 import axios from "axios";
-const ModalExperience = ({ modalVisible, setModalVisible, experiences, setExperiences, experience, setExperience }) => {
+import { Logout } from "../../helpers/Logout";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const ModalExperience = ({ modalVisible, setModalVisible, experiences, setExperiences, experience, setExperience, getExperiences }) => {
     const { themeCards, themeCardsText, themeBordeSelectPicker, themeBorderSelectionInput, themeBorderOutlineInput, themeBorderActiveInput } = DetectarTema();
     const [position, setPosition] = useState({ value: '', error: '' });
     const [company, setcompany] = useState({ value: '', error: '' });
     const [startedAt, setStartedAt] = useState('');
     const [endedAt, setEndedAt] = useState('');
     const [details, setDetails] = useState('');
-
+    const [loader, setLoader] = useState('');
     const [startedAtError, setStartedAtError] = useState('');
     const [endedAtError, setEndedAtError] = useState('');
 
-    let positionErrorMessage = '', companyErrorMessage = '', startedAtErrorMessage = '', endedAtErrorMessage = '';
     useEffect(() => {
         if (experience?.id) {
-            setPosition({value: experience.position, error: ''});
-            setcompany({value: experience.company, error: ''});
+            setPosition({ value: experience.position, error: '' });
+            setcompany({ value: experience.company, error: '' });
             setStartedAt(experience.started_at);
             setEndedAt(experience.ended_at);
             setDetails(experience.details);
@@ -28,6 +30,7 @@ const ModalExperience = ({ modalVisible, setModalVisible, experiences, setExperi
     }, [experience])
 
     const handleSubmit = async () => {
+        setLoader(true);
         const createExperience = {
             position: position.value,
             company: company.value,
@@ -40,43 +43,77 @@ const ModalExperience = ({ modalVisible, setModalVisible, experiences, setExperi
                 "Content-Type": "application/json"
             }
         }
+        /** EDICION **/
         if (experience.id) {
             createExperience.id = experience.id;
             try {
-                await axios.put('http://dev.creativolab.com.mx/api/v1/modules/experiences', createExperience, config);
-                const experiencesUpdated = await experiences.map(experienceState => experienceState.id === createExperience.id ? createExperience : experienceState)
-                await setExperiences(experiencesUpdated);
-                await setExperience({})
-                Alert.alert('¡Experiencia Editada!', 'La experiencia se ha editado correctamente', [{
-                    text: 'Ok', onPress: () => clearStates()
-                }])
+                const response = await axios.put('http://dev.creativolab.com.mx/api/v1/modules/experiences', createExperience, config);
+                if(response.data.status == 200){
+                    setExperiences([]);
+                    setExperience({})
+                    Alert.alert('¡Experiencia Editada!', 'La experiencia se ha editado correctamente', [{
+                        text: 'Ok', onPress: () => clearStates()
+                    }])
+                    setLoader(false)
+                }
             } catch (error) {
-                positionErrorMessage = error.response.data.errors.position;
-                companyErrorMessage = error.response.data.errors.company;
-                startedAtErrorMessage = error.response.data.errors.started_at;
-                endedAtErrorMessage = error.response.data.errors.ended_at;
-                setPosition({ ...position, error: positionErrorMessage });
-                setcompany({ ...company, error: companyErrorMessage });
-                setStartedAtError(startedAtErrorMessage);
-                setEndedAtError(endedAtErrorMessage);
+                setLoader(false);
+                if(error.response.data.status == 400){
+                    setPosition({ ...position, error: error.response.data.errors.position });
+                    setcompany({ ...company, error: error.response.data.errors.company });
+                    setStartedAtError(error.response.data.errors.started_at);
+                    setEndedAtError(error.response.data.errors.ended_at);
+                }else if(error.response.data.status == 401){
+                    Alert.alert(
+                        'No Autenticado',
+                        'Parece que no estás autenticado, por favor, inicia sesión',
+                        [{
+                            text: 'Iniciar Sesión',
+                            onPress: () => {
+                                setLogueado(false);
+                                AsyncStorage.clear();
+                            }
+                        }]
+                    )
+                }else if(error.response.data.status == 404){
+                    Alert.alert('¡Error!', error.response.data.errors.id, [{text: 'Ok'}]);
+                }
             }
         } else {
+            /** CREACIÓN **/
             try {
-                await axios.post('http://dev.creativolab.com.mx/api/v1/modules/experiences', createExperience, config);
-                Alert.alert('¡Experiencia Agregada!', 'El registro se ha agregado correctamente', [{ text: 'Ok' }]);
-                setExperiences([])
-                clearStates();
+                const response = await axios.post('http://dev.creativolab.com.mx/api/v1/modules/experiences', createExperience, config);
+                if (response.data.status == 201) {
+                    Alert.alert('¡Experiencia Agregada!', response.data.message, [{ text: 'Ok' }]);
+                    setExperiences([])
+                    clearStates();
+                    setLoader(false);
+                }
             } catch (error) {
-                positionErrorMessage = error.response.data.errors.position;
-                companyErrorMessage = error.response.data.errors.company;
-                startedAtErrorMessage = error.response.data.errors.started_at;
-                endedAtErrorMessage = error.response.data.errors.ended_at;
-                setPosition({ ...position, error: positionErrorMessage });
-                setcompany({ ...company, error: companyErrorMessage });
-                setStartedAtError(startedAtErrorMessage);
-                setEndedAtError(endedAtErrorMessage);
+                setLoader(false);
+                if (error.response.data.status == 400) {
+                    setPosition({ ...position, error: error.response.data.errors.position });
+                    setcompany({ ...company, error: error.response.data.errors.company });
+                    setStartedAtError(error.response.data.errors.started_at);
+                    setEndedAtError(error.response.data.errors.ended_at);
+                } else if (error.response.data.status == 401) {
+                    Alert.alert(
+                        'No Autenticado',
+                        'Parece que no estás autenticado, por favor, inicia sesión',
+                        [{
+                            text: 'Iniciar Sesión',
+                            onPress: () => {
+                                setLogueado(false);
+                                AsyncStorage.clear();
+                            }
+                        }]
+                    )
+                }else if(error.response.data.status == 403){
+                    Alert.alert('¡Error!', error.response.data.errors.out_of_bounds, [{text: 'Ok'}]);
+                }
             }
         }
+        getExperiences();
     }
 
     const clearStates = () => {
@@ -88,10 +125,6 @@ const ModalExperience = ({ modalVisible, setModalVisible, experiences, setExperi
         setDetails('');
         setStartedAtError('');
         setEndedAtError('');
-        positionErrorMessage = '';
-        companyErrorMessage = '';
-        startedAtErrorMessage = '';
-        endedAtErrorMessage = '';
     }
 
     return (
@@ -216,6 +249,7 @@ const ModalExperience = ({ modalVisible, setModalVisible, experiences, setExperi
                             />
                         </View>
                         {/* Botones de Cancelar y Guardar */}
+                        {loader ? <ActivityIndicator animating={true} color={Theme.colors.azul} size="large" /> : <></>}
                         <View style={[Theme.styles.flexRow, Theme.styles.mv30,]}>
                             <Pressable style={[Theme.styles.flex1,
                             Theme.colors.backgroundRed,
