@@ -14,7 +14,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import Education from './Education';
 import Dashboard from './Dashboard';
 import Skills from './Skills';
-import Experience from './Experience';
+import Experiences from './Experiences';
 import Services from './Services';
 import Testimonials from './Testimonials';
 import ComponentMenu from '../components/ComponentMenu';
