@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, Pressable, Text, ScrollView, Alert, View } from "react-native";
+import { SafeAreaView, Pressable, Text, ScrollView, Alert, View, RefreshControl } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Switch } from "react-native-paper";
 import { AntDesign } from '@expo/vector-icons';
@@ -7,28 +7,34 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import Theme from "../Theme/Theme";
 import DetectarTema from "../helpers/DetectarTema";
-import ModalEducation from "../components/ModalEducation";
-import EstudiosComponent from "../components/EstudiosComponent";
+import EducationComponent from "../components/Education/EducationComponent";
 import { useLogin } from '../context/LoginProvider';
 import ObtenerYears from "../helpers/ObtenerYears";
+import ModalEducation from "../components/Education/ModalEducation";
+
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
 
 const Education = () => {
   const { themeContainerStyle, themeTextStyle, themeCards } = DetectarTema();
   const [modalVisible, setModalVisible] = useState(false);
-  const [switchVisible, setSwitchVisible] = useState(false);
+  const [switchVisible, setSwitchVisible] = useState('');
   const [educations, setEducations] = useState([]);
   const [education, setEducation] = useState({})
   const [levels, setLevels] = useState([]);
   const [btnVisible, setBtnVisible] = useState(false);
   const { setLogueado } = useLogin();
   const [yearsList, setYearsList] = useState(ObtenerYears());
+  const [educationEnable, setEducationEnable] = useState(0)
+  const [refreshing, setRefreshing] = useState(false);
 
-  const obtenerEducacion = async () => {
+  const getEducations = async () => {
     try {
-      const respuesta = await axios.get('http://dev.creativolab.com.mx/api/v1/modules/education');
-      setEducations(respuesta.data.degrees);
-      setLevels(respuesta.data.levels);
-      
+      const response = await axios.get('http://dev.creativolab.com.mx/api/v1/modules/education');
+      setEducations(response.data.studies);
+      setLevels(response.data.levels);
+      response.data.module_status === 1 ? setSwitchVisible(true) : setSwitchVisible(false);
     } catch (error) {
       if (error.response.data.status == 401) {
         Alert.alert(
@@ -45,24 +51,14 @@ const Education = () => {
     }
   }
   useEffect(() => {
-    obtenerEducacion();
+    getEducations();
   }, [])
-  
-  const educationsTotal = educations.length;
-  useEffect(() => {
-    obtenerEducacion();
-    if(educationsTotal === 3){
-      setBtnVisible(true);
-    }else{
-      setBtnVisible(false);
-    }
-  }, [educations])
 
   const getStudy = async id => {
     setModalVisible(true);
     try {
       const respuesta = await axios.get(`http://dev.creativolab.com.mx/api/v1/modules/education/${id}`);
-      setEducation(respuesta.data.degree);
+      setEducation(respuesta.data.study);
     } catch (error) {
       if (error.response.data.status == '401') {
         Alert.alert(
@@ -88,11 +84,14 @@ const Education = () => {
       {
         text: 'Si, eliminar', onPress: async () => {
           try {
-            await axios.delete(`http://dev.creativolab.com.mx/api/v1/modules/education`, { data: { id: parseInt(id) } })
-            const studyUpdated = educations.filter(studyState => studyState.id !== id);
-            setEducations(studyUpdated);
+            const response = await axios.delete(`http://dev.creativolab.com.mx/api/v1/modules/education`, { data: { id: parseInt(id) } })
+            if (response.data.status == 200) {
+              setEducations([]);
+              getEducations();
+              Alert.alert('¡Estudio Eliminado!', 'El Estudio ha sido eliminado correctamente', [{ text: 'Ok' }]);
+            }
           } catch (error) {
-            if (error.response.data.status == '401') {
+            if (error.response.data.status == 401) {
               Alert.alert(
                 'No Autenticado',
                 'Parece que no estás autenticado, por favor, inicia sesión',
@@ -115,14 +114,39 @@ const Education = () => {
 
   const moduleEnable = async () => {
     try {
-      const enable = {education_enabled: !switchVisible}
-      console.log(enable);
-      await axios.put('http://dev.creativolab.com.mx/api/v1/modules/education/toggle', enable);
-      setSwitchVisible(!switchVisible);
+      const enable = { education_enabled: !switchVisible }
+      const response = await axios.put('http://dev.creativolab.com.mx/api/v1/modules/education/toggle', enable);
+      if (response.data.status == 200) {
+        Alert.alert('Cambio Exitoso', response.data.message, [{ text: 'Ok' }]);
+        setSwitchVisible(!switchVisible);
+      }
     } catch (error) {
-      console.log(error.response.data);
+      if (error.response.data.status == 401) {
+        Alert.alert(
+          'No Autenticado',
+          'Parece que no estás autenticado, por favor, inicia sesión',
+          [{
+            text: 'Iniciar Sesión',
+            onPress: () => {
+              setLogueado(false);
+              AsyncStorage.clear();
+            }
+          }])
+      }else if(error.response.data.status == 403){
+        Alert.alert('¡Error!', error.response.data.message, [{text: 'Ok'}]);
+      } else {
+        Alert.alert('¡Hubo un error!', 'Lo sentimos, por favor, intente más tarde', [{ text: 'Ok' }]);
+      }
     }
   }
+
+  //Refrescar Registros
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setEducations([]);
+    getEducations();
+    wait(1000).then(() => setRefreshing(false));
+  }, []);
 
   return (
     <SafeAreaView style={[Theme.styles.flex1, themeContainerStyle]}>
@@ -136,7 +160,9 @@ const Education = () => {
           trackColor={{ false: Theme.colors.grisClaro, true: Theme.colors.grisClaro }}
         />
       </View>
-      <ScrollView>
+      <ScrollView
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
         <View style={[Theme.styles.mh10, Theme.styles.mt10, Theme.styles.mb20, themeCards]}>
           <View style={[Theme.styles.flexRow, Theme.styles.alignCenter, Theme.styles.justifyBetween, Theme.styles.mh20]}>
             <Text style={[Theme.styles.fs20, themeTextStyle, Theme.styles.bold]}>Mis Estudios</Text>
@@ -152,7 +178,7 @@ const Education = () => {
             <Text style={[themeTextStyle, Theme.styles.textCenter, Theme.styles.mv60, Theme.styles.fs22]}>No hay registros existentes.</Text>
           ) : (
             educations.map(education => (
-              <EstudiosComponent
+              <EducationComponent
                 key={education.id}
                 educations={education}
                 deleteEducation={deleteEducation}
@@ -170,7 +196,7 @@ const Education = () => {
         setEducations={setEducations}
         education={education}
         setEducation={setEducation}
-        obtenerEducacion={obtenerEducacion}
+        getEducations={getEducations}
       />
     </SafeAreaView>
   );

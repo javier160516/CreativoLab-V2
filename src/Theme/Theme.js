@@ -19,15 +19,17 @@ const Theme = {
         backgroundGray2: { backgroundColor: '#f8f9fc' },
         backgroundGray3: { backgroundColor: '#5A5C69' },
         backgroundGray4: { backgroundColor: '#2B2B2B' },
+        backgroundGray5: { backgroundColor: '#CCC' },
+        backgroundWhiteGray: { backgroundColor: '#F5F5F5' },
         colorAzul: { color: '#1363DF' },
         colorGreen: { color: '#1CC88A' },
         colorGreenBlue: { color: '#36B9CC' },
         colorGray: { color: '#5A5C69' },
-        backgroundRed: {backgroundColor: '#F32424'},
-        backgroundBlue: {backgroundColor: '#1336DF'},
+        backgroundRed: { backgroundColor: '#F32424' },
+        backgroundBlue: { backgroundColor: '#1336DF' },
         colorAzul: { color: '#1363DF' },
-        WhiteColor: {color: '#FFF'},
-        blackColor: {color: '#000'},
+        WhiteColor: { color: '#FFF' },
+        blackColor: { color: '#000' },
         blanco: '#FFF',
         negro: '#000',
         azul: '#1363DF',
@@ -53,10 +55,13 @@ const Theme = {
         pv60: { paddingVertical: 60 },
         ph10: { paddingHorizontal: 10 },
         ph20: { paddingHorizontal: 20 },
+        ph30: {paddingHorizontal: 30},
         ph60: { paddingHorizontal: 60 },
+        pb10: { paddingBottom: 10 },
         pb40: { paddingBottom: 40 },
         pb20: { paddingBottom: 20 },
         pt8: { paddingTop: 8 },
+        pt10: { paddingTop: 10 },
         pt20: { paddingTop: 20 },
         pt40: { paddingTop: 40 },
         pt60: { paddingTop: 60 },
@@ -72,6 +77,10 @@ const Theme = {
         mh20: { marginHorizontal: 20 },
         mh30: { marginHorizontal: 30 },
         mh60: { marginHorizontal: 60 },
+        /** LEFT **/
+        ml10: { marginLeft: 10 },
+        /** RIGHT **/
+        mr10: { marginRight: 10 },
         /** BOTTOM **/
         mb10: { marginBottom: 10 },
         mb20: { marginBottom: 20 },
@@ -102,6 +111,7 @@ const Theme = {
         fsTitle2: { fontSize: 30 },
         fsTitle3: { fontSize: 25 },
         /** ANCHO DEL TEXTO **/
+        normal: { fontWeight: '400' },
         bold: { fontWeight: '900' },
         semiBold: { fontWeight: '700' },
         /** POSICIONES **/
@@ -116,7 +126,7 @@ const Theme = {
         w80: { width: '80%' },
         w25: { width: 25 },
         h100: { height: '100%' },
-        h25: { height: 25 },
+        h25: { height: '25%' },
 
         /** COLOR DE BORDES **/
         bordeAzul: { borderColor: '#1363DF' },

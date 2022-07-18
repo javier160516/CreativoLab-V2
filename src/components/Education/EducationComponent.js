@@ -1,11 +1,11 @@
 import React from 'react'
 import { Pressable, Text, View } from 'react-native';
 import { Card } from 'react-native-paper';
-import DetectarTema from '../helpers/DetectarTema';
-import Theme from '../Theme/Theme';
+import DetectarTema from '../../helpers/DetectarTema';
+import Theme from '../../Theme/Theme';
 import { FontAwesome } from '@expo/vector-icons';
 
-const EstudiosComponent = ({ educations, deleteEducation, getStudy}) => {
+const EducationComponent = ({ educations, deleteEducation, getStudy}) => {
     const { themeTextStyle, themeCards } = DetectarTema();
     const { degree, details, institute, level, started_at, ended_at, id } = educations;
     return (
@@ -39,4 +39,4 @@ const EstudiosComponent = ({ educations, deleteEducation, getStudy}) => {
     )
 }
 
-export default EstudiosComponent
+export default EducationComponent

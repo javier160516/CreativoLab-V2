@@ -19,6 +19,12 @@ const DetectarTema = () => {
     const themeBorderSelectionInput = colorScheme === 'light' ? Theme.colors.azul : Theme.colors.grisClaro;
     const themeBorderOutlineInput = colorScheme === 'light' ? Theme.colors.bordeTextInput : Theme.colors.grisOcuro2;
     const themeDrawerNavigatorText = colorScheme === 'light' ? Theme.colors.azul : Theme.colors.blanco;
+    const themeCardsHabilidades = colorScheme === 'light' ? Theme.colors.backgroundWhiteGray : Theme.colors.backgroundGray4;
+    const themeBorderHabilidades = colorScheme === 'light' ? null : {borderColor: '#444', borderWidth: 1};
+    const themeCategoriesSkills = colorScheme === 'light' ? Theme.colors.backgroundGray4 : Theme.colors.backgroundWhiteGray;
+    const themeTextCategoriesSkill = colorScheme === 'light' ? Theme.colors.WhiteColor : Theme.colors.negro;
+    const themeBorderTestimonials = colorScheme === 'light' ? {borderColor: '#F5F5F5'} : {borderColor: '#444'};
+    const themeColorIconsModals = colorScheme === 'light' ? Theme.colors.blanco : Theme.colors.negro;
     return {
         themeTextStyle,
         themeContainerStyle,
@@ -34,6 +40,12 @@ const DetectarTema = () => {
         themeBorderSelectionInput,
         themeBorderOutlineInput,
         themeDrawerNavigatorText,
+        themeCardsHabilidades,
+        themeBorderHabilidades,
+        themeCategoriesSkills,
+        themeTextCategoriesSkill,
+        themeBorderTestimonials,
+        themeColorIconsModals,
     };
 }
 
