@@ -17,7 +17,6 @@ const ImageProduct = ({ showImageProduct, setShowImageProduct, setImage }) => {
         if (!result.cancelled) {
             setImage(result.uri);
         }
-
     };
     return (
         <Modal
