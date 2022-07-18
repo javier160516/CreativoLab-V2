@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, Pressable, TouchableOpacity, Modal, View, ScrollView } from 'react-native'
-import Theme from '../Theme/Theme';
-import DetectarTema from '../helpers/DetectarTema';
+import Theme from '../../Theme/Theme';
+import DetectarTema from '../../helpers/DetectarTema';
 import * as ImagePicker from 'expo-image-picker';
 
 const ImageProduct = ({ showImageProduct, setShowImageProduct, setImage }) => {
@@ -9,15 +9,15 @@ const ImageProduct = ({ showImageProduct, setShowImageProduct, setImage }) => {
     
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4, 3],
-            quality: 0,
+            quality: 1,
         });
         if (!result.cancelled) {
             setImage(result.uri);
+            setShowImageProduct(false);
         }
-
     };
     return (
         <Modal
