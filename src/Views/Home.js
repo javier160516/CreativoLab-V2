@@ -18,6 +18,8 @@ import Experience from './Experience';
 import Services from './Services';
 import Testimonials from './Testimonials';
 import ComponentMenu from '../components/ComponentMenu';
+import Profile from './Profile';
+
 
 import DetectarTema from '../helpers/DetectarTema';
 import Theme from '../Theme/Theme';
@@ -160,6 +162,19 @@ const Menu = ({modules, firstNameUser, firstLastNameUser, modulesEnable}) => {
                 name="Testimonios"
                 component={Testimonials}
                 // moduleTestimonials={moduleTestimonials}
+                options={{
+                    headerMode: 'screen',
+                    headerTitleAlign: 'center',
+                    headerTintColor: themeTextStyle.color,
+                    headerStyle: {
+                        backgroundColor: themeContainerStyle.backgroundColor
+                    },
+                    drawerIcon: () => (<Fontisto name="persons" size={24} color={themeColorIcons} />)
+                }}
+            />
+            <Drawer.Screen 
+                name='Perfil'
+                component={Profile}
                 options={{
                     headerMode: 'screen',
                     headerTitleAlign: 'center',

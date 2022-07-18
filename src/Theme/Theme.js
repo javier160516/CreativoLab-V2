@@ -126,7 +126,7 @@ const Theme = {
         w80: { width: '80%' },
         w25: { width: 25 },
         h100: { height: '100%' },
-        h25: { height: 25 },
+        h25: { height: '25%' },
 
         /** COLOR DE BORDES **/
         bordeAzul: { borderColor: '#1363DF' },
