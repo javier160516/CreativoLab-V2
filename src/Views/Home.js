@@ -224,7 +224,7 @@ const Home = () => {
     useEffect(() => {
         const getData = async () => {
             try {
-                const response = await axios.get('http://dev.creativolab.com.mx/api/v1/dashboard');
+                const response = await axios.get('http://dev.creativolab.com.mx/api/v1/modules');
                 setModules(response.data.modules);
                 setFirstNameUser(response.data.user.first_name);
                 setMiddleNameUser(response.data.user.middle_name);
