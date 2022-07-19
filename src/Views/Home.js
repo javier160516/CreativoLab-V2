@@ -19,7 +19,6 @@ import Experience from './Experience';
 import Services from './Services';
 import Testimonials from './Testimonials';
 import ComponentMenu from '../components/ComponentMenu';
-import Portfolio from './Portfolio';
 import Profile from './Profile';
 import DetectarTema from '../helpers/DetectarTema';
 import Theme from '../Theme/Theme';
