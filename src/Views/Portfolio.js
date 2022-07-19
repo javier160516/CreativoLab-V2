@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, Pressable, Switch } from 'react-native'
+import { Text, View, Pressable, Switch, ScrollView } from 'react-native'
 import DetectarTema from '../helpers/DetectarTema'
 import Theme from '../Theme/Theme';
 import Categories from '../components/Portfolio/CategoriesPortfolio';
@@ -12,16 +12,13 @@ const Portfolio = () => {
     return (
         <View style={[themeContainerStyle, Theme.styles.flex1]}>
             <View style={[Theme.styles.mh20, Theme.styles.flexRow, Theme.styles.alignCenter, Theme.styles.justifyBetween]}>
-                <Text style={[Theme.styles.fs20]}>Portfolio</Text>
+                <Text style={[Theme.styles.fs20, themeCardsText, Theme.styles.bold]}>Portfolio</Text>
                 <Switch />
             </View>
-            <View>
+            <ScrollView style={Theme.styles.mv20}>
                 <CategoriesPortfolio />
-            </View>
-            <View>
-                <Projects/>
-            </View>
-
+                <Projects />
+            </ScrollView>
         </View>
     )
 }
