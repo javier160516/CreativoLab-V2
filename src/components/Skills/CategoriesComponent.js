@@ -3,7 +3,6 @@ import { View, Text, Pressable, Alert } from 'react-native'
 import { Card } from 'react-native-paper'
 import DetectarTema from '../../helpers/DetectarTema'
 import Theme from '../../Theme/Theme'
-import { FontAwesome } from '@expo/vector-icons';
 import ModalSkillsCategories from './ModalSkillsCategories'
 import Category from './Category'
 import axios from 'axios'
