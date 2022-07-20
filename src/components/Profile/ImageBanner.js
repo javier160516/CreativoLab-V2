@@ -7,7 +7,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 // import { BottomSheet } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
 
-const ImagesProfile = ({ showImageProfile, setShowImageProfile, image, setImage }) => {
+const ImageBanner= ({ imageBannerjs, setImageBannerjs, ImageBanner, setImageBanner }) => {
     // const [closeBottom, setCloseBottom] = useState(false);
     const [imageProfile, setSelectImageProfile] = useState(null);
 
@@ -19,7 +19,7 @@ const ImagesProfile = ({ showImageProfile, setShowImageProfile, image, setImage 
             quality: 0,
         });
         if (!result.cancelled) {
-            setImage(result.uri);
+            setImageBanner(result.uri);
         }
     };
     const selectPhoto = async () => {
@@ -30,15 +30,15 @@ const ImagesProfile = ({ showImageProfile, setShowImageProfile, image, setImage 
             quality: 1,
         });
         if(!result.cancelled){
-            setImage(result.uri)
+            setImageBanner(result.uri)
         }
     };
     return (
         <View>
             <BottomSheet
-                onBackButtonPress={() => setShowImageProfile(false)}
-                onBackdropPress={() => setShowImageProfile(false)}
-                visible={showImageProfile}
+                onBackButtonPress={() => setImageBannerjs(false)}
+                onBackdropPress={() => setImageBannerjs(false)}
+                visible={imageBannerjs}
                 
             >
                 <View style={[Theme.colors.backgroundBlanco, Theme.styles.w100, Theme.styles.h25]}>
@@ -54,7 +54,7 @@ const ImagesProfile = ({ showImageProfile, setShowImageProfile, image, setImage 
                         <Pressable onPress={selectPhoto} style={[Theme.colors.backgroundBlue,Theme.styles.alignCenter ,Theme.styles.pv10, Theme.styles.mv10, Theme.styles.bordeRedondo1]}>
                             <Text style={[Theme.styles.bold, Theme.colors.WhiteColor]}>Tomar una Foto</Text>
                         </Pressable>
-                        <Pressable onPress={() => setShowImageProfile(false)}   style={[Theme.styles.pv10, Theme.colors.backgroundRed,Theme.styles.bordeRedondo1 ,Theme.styles.alignCenter]}>
+                        <Pressable onPress={() => setImageBannerjs(false)}   style={[Theme.styles.pv10, Theme.colors.backgroundRed,Theme.styles.bordeRedondo1 ,Theme.styles.alignCenter]}>
                             <Text style={[Theme.styles.bold, Theme.colors.WhiteColor]}>Cancelar</Text>
                         </Pressable>
                     </View>
@@ -64,4 +64,4 @@ const ImagesProfile = ({ showImageProfile, setShowImageProfile, image, setImage 
     )
 }
 
-export default ImagesProfile
+export default ImageBanner

@@ -1,22 +1,33 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, SafeAreaView, Pressable, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, SafeAreaView, Pressable, TouchableOpacity, Image } from 'react-native'
 import { Entypo } from '@expo/vector-icons';
 import DetectarTema from '../../helpers/DetectarTema';
 import { FontAwesome5 } from '@expo/vector-icons';
 import ImagesProfile from './ImagesProfile';
+import ImageBanner from './ImageBanner';
 import Theme from '../../Theme/Theme';
 
 const EditProfile = () => {
+    const [image, setImage] = useState(false);
+    const [imageBanner, setImageBanner] = useState(false);
+    const [imageBannerjs, setImageBannerjs] = useState(false);
     const [showImageProfile, setShowImageProfile] = useState(false);
     const { themeBorderOutlineInput, themeContainerStyle, themeColorIcons, themeBorderActiveInput, themeCards, themeCardsText, themeBorderSelectionInput } = DetectarTema();
     return (
         <View>
-            <TouchableOpacity onPress={() => setShowImageProfile(!showImageProfile)} style={[Theme.colors.backgroundGray3, Theme.styles.alignCenter, Theme.styles.mv10, Theme.styles.bordeRedondo1, { padding: 80 }]}>
-                <Entypo name="camera" size={24} style={[Theme.styles.mh10]} color={themeColorIcons} />
+            <TouchableOpacity onPress={() => setImageBannerjs(!imageBannerjs)} style={[Theme.colors.backgroundGray3, Theme.styles.alignCenter, Theme.styles.bordeRedondo1]}>
+                {/* <Entypo name="camera" size={24} style={[Theme.styles.mh10]} color={themeColorIcons} /> */}
+                {imageBanner ?  (<Image source={{ uri: imageBanner }} style={{ width: 400, height: 200 }} />) :
+                (<View style={{width: 400, height: 200}}/>)  
+            }
             </TouchableOpacity>
             <View style={[Theme.styles.alignCenter]}>
-                <TouchableOpacity onPress={() => setShowImageProfile(!showImageProfile)} style={[Theme.styles.borde2, Theme.colors.backgroundGray3, Theme.styles.justifyCenter, { paddingHorizontal: 50, paddingVertical: 50, marginTop: -70, borderRadius: 100 }]}>
-                    <FontAwesome5 name="user" size={30} color={themeColorIcons} />
+                <TouchableOpacity onPress={() => setShowImageProfile(!showImageProfile)} style={[Theme.styles.borde2, Theme.colors.backgroundGray3, Theme.styles.justifyCenter, { marginTop: -80, borderRadius: 100 }]}>
+                    {/* <FontAwesome5 name="user" size={30} color={themeColorIcons} /> */}
+                    {image ? 
+                    (<Image source={{ uri: image}} style={{borderRadius: 70, width: 150, height: 150 }} />) :
+                    (<View style={{paddingHorizontal: 70, paddingVertical: 70}}></View>)
+                }
                 </TouchableOpacity>
             </View>
             <View style={[Theme.styles.alignCenter, Theme.styles.justifyCenter, Theme.styles.flexRow]}>
@@ -35,6 +46,14 @@ const EditProfile = () => {
             <ImagesProfile
                 showImageProfile={showImageProfile}
                 setShowImageProfile={setShowImageProfile}
+                image={image}
+                setImage={setImage}
+            />
+            <ImageBanner
+                imageBanner={imageBanner}
+                setImageBanner={setImageBanner}
+                imageBannerjs={imageBannerjs}
+                setImageBannerjs={setImageBannerjs}
             />
         </View>
 
