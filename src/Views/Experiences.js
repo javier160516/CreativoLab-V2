@@ -15,7 +15,7 @@ const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
-const Experience = () => {
+const Experiences = () => {
   const [experiences, setExperiences] = useState([]);
   const [experience, setExperience] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
@@ -206,4 +206,4 @@ const Experience = () => {
   )
 }
 
-export default Experience;
+export default Experiences;

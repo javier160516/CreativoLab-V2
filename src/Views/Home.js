@@ -15,7 +15,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import Education from './Education';
 import Dashboard from './Dashboard';
 import Skills from './Skills';
-import Experience from './Experience';
+import Experiences from './Experiences';
 import Services from './Services';
 import Testimonials from './Testimonials';
 import ComponentMenu from '../components/ComponentMenu';
@@ -30,7 +30,24 @@ const Drawer = createDrawerNavigator();
 
 const Menu = ({modules, firstNameUser, firstLastNameUser, modulesEnable}) => {
     const { themeTextStyle, themeColorIcons, themeContainerStyle } = DetectarTema();
-    
+    const modulesViews = {
+        "Education": Education,
+        "Skills": Skills,
+        "Experiences": Experiences,
+        "Services": Services,
+        "Products": Products,
+        "Portfolio": Portfolio,
+        "Testimonials": Testimonials,
+    }
+    const iconsMenu = {
+        "Education": <FontAwesome5 name="graduation-cap" size={24} color={themeColorIcons} />,
+        "Skills": <FontAwesome name="hand-scissors-o" size={24} color={themeColorIcons} />,
+        "Experiences": <Entypo name="briefcase" size={24} color={themeColorIcons} />,
+        "Services": <FontAwesome5 name="building" size={24} color={themeColorIcons} />,
+        "Products": <FontAwesome5 name="building" size={24} color={themeColorIcons} />,
+        "Portfolio": <Entypo name="briefcase" size={24} color={themeColorIcons} />,
+        "Testimonials": <Fontisto name="persons" size={24} color={themeColorIcons} />,
+    }
     return (
         <Drawer.Navigator
             useLegacyImplementation
@@ -58,9 +75,12 @@ const Menu = ({modules, firstNameUser, firstLastNameUser, modulesEnable}) => {
                     drawerIcon: () => (<AntDesign name="dashboard" size={24} color={themeColorIcons} />),
                 }}
             />
-            <Drawer.Screen
-                name="Estudios"
-                component={Education}
+
+            {modules.map(moduleState =>  (
+                <Drawer.Screen
+                name={moduleState}
+                component={modulesViews[moduleState]}
+                key={moduleState}
                 initialParams={{enable: modulesEnable.educationEnable}}
                 options={{
                     headerMode: 'screen',
@@ -69,108 +89,11 @@ const Menu = ({modules, firstNameUser, firstLastNameUser, modulesEnable}) => {
                     headerStyle: {
                         backgroundColor: themeContainerStyle.backgroundColor
                     },
-                    drawerIcon: () => (<FontAwesome5 name="graduation-cap" size={24} color={themeColorIcons} />),
+                    drawerIcon: () => (iconsMenu[moduleState]),
                 }}
             />
-            <Drawer.Screen
-                name="Habilidades"
-                component={Skills}
-                // moduleSkills={moduleSkills}
-                // initialParams={moduleSkills}
-                options={{
-                    headerMode: 'screen',
-                    headerTitleAlign: 'center',
-                    headerTintColor: themeTextStyle.color,
-                    headerStyle: {
-                        backgroundColor: themeContainerStyle.backgroundColor
-                    },
-                    drawerIcon: () => (<FontAwesome name="hand-scissors-o" size={24} color={themeColorIcons} />),
-                }}
-                
-            />
-            <Drawer.Screen
-                name="Experiencia Laboral"
-                component={Experience}
-                // moduleExperiences={moduleExperiences}
-                options={{
-                    headerMode: 'screen',
-                    headerTitleAlign: 'center',
-                    headerTintColor: themeTextStyle.color,
-                    headerStyle: {
-                        backgroundColor: themeContainerStyle.backgroundColor
-                    },
-                    drawerIcon: () => (<Entypo name="briefcase" size={24} color={themeColorIcons} />)
-                }}
-            />
-            {modules.map(module => module === 'services' ? (
-                <Drawer.Screen
-                    name="Servicio"
-                    component={Services}
-                    // moduleServices={moduleServices}
-                    key={module}
-                    options={{
-                        headerMode: 'screen',
-                        headerTitleAlign: 'center',
-                        headerTintColor: themeTextStyle.color,
-                        headerStyle: {
-                            backgroundColor: themeContainerStyle.backgroundColor
-                        },
-                        drawerIcon: () => (<FontAwesome5 name="building" size={24} color={themeColorIcons} />)
-                    }}
-                />
-            ) : null)}
-            {modules.map(module => module === 'products' ? (
+            ))}
 
-                <Drawer.Screen
-                    name="Productos"
-                    component={Products}
-                    // moduleProducts={moduleProducts}
-                    key={module}
-                    options={{
-                        headerMode: 'screen',
-                        headerTitleAlign: 'center',
-                        headerTintColor: themeTextStyle.color,
-                        headerStyle: {
-                            backgroundColor: themeContainerStyle.backgroundColor
-                        },
-                        drawerIcon: () => (<FontAwesome5 name="building" size={24} color={themeColorIcons} />)
-                    }}
-                />
-            ) : null)}
-            {modules.map(module => module === 'portfolio' ? (
-
-                <Drawer.Screen
-                    name="Portafolio"
-                    component={Portfolio}
-                    // modulePortfolio={modulePortfolio}
-                    key={module}
-                    options={{
-                        headerMode: 'screen',
-                        headerTitleAlign: 'center',
-                        headerTintColor: themeTextStyle.color,
-                        headerStyle: {
-                            backgroundColor: themeContainerStyle.backgroundColor
-                        },
-                        drawerIcon: () => (<Entypo name="briefcase" size={24} color={themeColorIcons} />)
-                    }}
-                />
-            ) : null)}
-
-
-            <Drawer.Screen
-                name="Testimonios"
-                component={Testimonials}
-                // moduleTestimonials={moduleTestimonials}
-                options={{
-                    headerMode: 'screen',
-                    headerTitleAlign: 'center',
-                    headerTintColor: themeTextStyle.color,
-                    headerStyle: {
-                        backgroundColor: themeContainerStyle.backgroundColor
-                    },
-                    drawerIcon: () => (<Fontisto name="persons" size={24} color={themeColorIcons} />)
-                }}
-            />
             <Drawer.Screen 
                 name='Perfil'
                 component={Profile}
@@ -181,20 +104,7 @@ const Menu = ({modules, firstNameUser, firstLastNameUser, modulesEnable}) => {
                     headerStyle: {
                         backgroundColor: themeContainerStyle.backgroundColor
                     },
-                    drawerIcon: () => (<Fontisto name="persons" size={24} color={themeColorIcons} />)
-                }}
-            />
-            <Drawer.Screen
-                name="Portfolio"
-                component={Portfolio}
-                options={{
-                    headerMode: 'screen',
-                    headerTitleAlign: 'center',
-                    headerTintColor: themeTextStyle.color,
-                    headerStyle: {
-                        backgroundColor: themeContainerStyle.backgroundColor
-                    },
-                    drawerIcon: () => (<AntDesign name="folderopen" size={24} color={themeColorIcons} />)
+                    drawerIcon: () => (<Fontisto name="person" size={24} color={themeColorIcons} />)
                 }}
             />
         </Drawer.Navigator>
@@ -230,13 +140,13 @@ const Home = () => {
                 setFirstLastNameUser(response.data.user.first_last_name);
                 setSecondLastNameUser(response.data.user.second_last_name);
                 //Modules enabled
-                setModulesEnable({educationEnable: response.data.user.is_education_enabled});
-                setModulesEnable({skillsEnable: response.data.user.are_skills_enabled});
-                setModulesEnable({experiencesEnable: response.data.user.are_experiences_enabled});
-                setModulesEnable({productsEnable: response.data.user.are_products_enabled});
-                setModulesEnable({servicesEnable: response.data.user.are_services_enabled});
-                setModulesEnable({portfolioEnable: response.data.user.is_portfolio_enabled});
-                setModulesEnable({testimonialsEnable: response.data.user.are_testimonials_enabled});
+                // setModulesEnable({educationEnable: response.data.user.is_education_enabled});
+                // setModulesEnable({skillsEnable: response.data.user.are_skills_enabled});
+                // setModulesEnable({experiencesEnable: response.data.user.are_experiences_enabled});
+                // setModulesEnable({productsEnable: response.data.user.are_products_enabled});
+                // setModulesEnable({servicesEnable: response.data.user.are_services_enabled});
+                // setModulesEnable({portfolioEnable: response.data.user.is_portfolio_enabled});
+                // setModulesEnable({testimonialsEnable: response.data.user.are_testimonials_enabled});
             } catch (error) {
                 console.log(error.response.data.status);
             }

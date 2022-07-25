@@ -138,7 +138,7 @@ const Theme = {
         /** TAMAÑO DE BORDE **/
         borde1: { borderWidth: 1 },
         borde2: { borderWidth: 2 },
-
+        borde3: {borderWidth: 3},
         /** BORDE REDONDO **/
         bordeRedondo1: { borderRadius: 5 },
         bordeRedondo2: { borderRadius: 10 },
