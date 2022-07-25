@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, SafeAreaView, Pressable, TouchableOpacity, Button, Alert, StyleSheet } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import { View, Text, Pressable, Alert, StyleSheet } from 'react-native'
 import Theme from '../../Theme/Theme';
 import { Card } from 'react-native-paper';
 import DetectarTema from '../../helpers/DetectarTema';
@@ -7,18 +7,43 @@ import TextInput from '../TextInput';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useLogin } from '../../context/LoginProvider';
 
-function InformationProfile({ personalInformation }) {
-    const { themeBorderOutlineInput, themeColorIcons, themeBordeSelectPicker, themeBorderActiveInput, themeCards, themeCardsText, themeBorderSelectionInput } = DetectarTema();
+function InformationProfile({ personalInformation, getDataProfile }) {
+    const { themeBorderOutlineInput, themeColorIcons, themeBordeSelectPicker, themeBorderActiveInput, themeCards, themeCardsText, themeBorderSelectionInput, themeCardsHabilidades } = DetectarTema();
     const yearMax = new Date().getFullYear();
-    const [about, setAbout] = useState({ value: '', error: '' });
+    const [aboutMe, setAboutMe] = useState({ value: '', error: '' });
     const [date, setDate] = useState(new Date());
     const [phoneNumber, setPhoneNumber] = useState({ value: '', error: '' });
-    const [address, setAddress] = useState({ value: '', error: '' });
+    const [addressPerson, setAddressPerson] = useState({ value: '', error: '' });
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
     const [dateOfBirthError, setDateOfBirthError] = useState('');
     const [newDate, setNewDate] = useState('');
+    const { setLogueado } = useLogin();
+
+
+    const {about, date_of_birth, phone_number, address} = personalInformation;
+    
+    useEffect(() => {
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        if(month >= 10){
+            setNewDate(`${year}-${month}-${day}`);
+        }else{
+            setNewDate(`${year}-0${month}-${day}`);
+        }
+    }, [date])
+
+    useEffect(() => {
+        setAboutMe({value: about, error: ''});
+        setNewDate(date_of_birth);
+        setPhoneNumber({value: phone_number, error: ''});
+        setAddressPerson({value: address, error: ''});
+    }, [personalInformation]);
+
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
         setShow(false);
@@ -32,18 +57,18 @@ function InformationProfile({ personalInformation }) {
         showMode('date');
     };
 
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    setNewDate(`${year}-${month}-${day}`);
-
     const saveInformation = async () => {
         setDateOfBirthError('');
+        console.log(new Date().getFullYear() - 15);
+        if(newDate.split('-')[0] > (new Date().getFullYear() - 10 )){
+            setDateOfBirthError('Fecha no valida');
+            return;
+        }
         const informationProfile = {
-            about: about.value,
+            about: aboutMe.value,
             date_of_birth: newDate,
             phone_number: phoneNumber.value,
-            address: address.value
+            address: addressPerson.value
         }
         const config = {
             headers: {
@@ -58,21 +83,32 @@ function InformationProfile({ personalInformation }) {
             }
         } catch (error) {
             if (error.response.data.status == 400) {
-                setAbout({ ...about, error: error.response.data.errors.about });
+                setAboutMe({ ...aboutMe, error: error.response.data.errors.about });
                 if(error.response.data.errors.date_of_birth){
                     setDateOfBirthError('Fecha no valida');
                 }
                 setPhoneNumber({ ...phoneNumber, error: error.response.data.errors.phone_number });
-                setAddress({ ...address, error: error.response.data.errors.address });
+                setAddressPerson({ ...addressPerson, error: error.response.data.errors.address });
+            }else if(error.response.data.status == 401){
+                Alert.alert(
+                    'No Autenticado',
+                    'Parece que no estás autenticado, por favor, inicia sesión',
+                    [{
+                        text: 'Iniciar Sesión',
+                        onPress: () => {
+                            setLogueado(false);
+                            AsyncStorage.clear();
+                        }
+                    }]
+                )
             }
         }
+        getDataProfile();
     }
     return (
         <View>
-            <Card style={[themeCards, Theme.styles.bordeRedondo1, Theme.styles.mv10, Theme.styles.pv10, Theme.styles.mh10]}>
+            <Card style={[themeCardsHabilidades, Theme.styles.bordeRedondo1, Theme.styles.mv10, Theme.styles.pv10, Theme.styles.mh10]}>
                 <Text style={[Theme.styles.fs20, Theme.styles.bold, Theme.styles.mh10, themeCardsText]}>Información del Perfil</Text>
-                <Text style={[Theme.styles.mh10, themeCardsText]}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin at ultrices odio, in tincidunt dui.
-                    Donec velit diam, pharetra ac mattis maximus, iaculis id libero.</Text>
                 <View style={[Theme.styles.pv20]}>
                     <Text style={[Theme.styles.mh10, themeCardsText]}>Sobre Mi</Text>
                     <TextInput
@@ -87,10 +123,10 @@ function InformationProfile({ personalInformation }) {
                         placeholderTextColor={Theme.colors.gris}
                         style={[Theme.styles.mh10, Theme.styles.mt10, themeCards]}
                         theme={{ colors: { text: themeCardsText.color } }}
-                        value={about.value}
-                        onChangeText={(value) => setAbout({ value: value, error: '' })}
-                        error={!!about.error}
-                        errorText={about.error}
+                        value={aboutMe.value}
+                        onChangeText={(value) => setAboutMe({ value: value, error: '' })}
+                        error={!!aboutMe.error}
+                        errorText={aboutMe.error}
                     />
                 </View>
                 <View>
@@ -153,14 +189,14 @@ function InformationProfile({ personalInformation }) {
                         activeOutlineColor={themeBorderActiveInput}
                         returnKeyType='next'
                         underlineColor="transparent"
-                        placeholder='Dirección'
+                        placeholder='Dirección...'
                         placeholderTextColor={Theme.colors.gris}
                         style={[Theme.styles.mh10, Theme.styles.mt10, themeCards]}
                         theme={{ colors: { text: themeCardsText.color } }}
-                        value={address.value}
-                        onChangeText={(value) => setAddress({ value: value, error: '' })}
-                        error={!!address.error}
-                        errorText={address.error}
+                        value={addressPerson.value}
+                        onChangeText={(value) => setAddressPerson({ value: value, error: '' })}
+                        error={!!addressPerson.error}
+                        errorText={addressPerson.error}
                     />
                 </View>
                 <View style={[Theme.styles.pv20, Theme.styles.alignCenter]}>
