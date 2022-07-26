@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
 import Theme from '../Theme/Theme'
@@ -8,19 +8,27 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Logout } from '../helpers/Logout'
 import { useLogin } from '../context/LoginProvider'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { StatusBar } from 'expo-status-bar';
 
 const ComponentMenu = (props) => {
     const { setLogueado } = useLogin();
-    const { themeTextStyle, themeContainerStyle } = DetectarTema();
-    const {firstNameUser, firstLastNameUser} = props;
-    const avatarName = `${firstNameUser.substr(0,1)}${firstLastNameUser.substr(0,1)}`;
+    const { themeContainerStyle, themeBordeSelectPicker } = DetectarTema();
+    const { firstNameUser, firstLastNameUser, avatarUser } = props;
+    console.log(avatarUser);
+    const avatarName = `${firstNameUser.substr(0, 1)}${firstLastNameUser.substr(0, 1)}`;
     return (
         <View style={[Theme.styles.flex1, themeContainerStyle]}>
+            <StatusBar style='auto' />
             <View style={[Theme.styles.alignCenter, Theme.styles.pt80, Theme.styles.pb40, { backgroundColor: Theme.colors.azul }]}>
-                <View style={Theme.styles.mb20}>
-                    <Avatar.Text size={100} label={avatarName}/>
-                </View>
-                {/* <Avatar.Image size={100} source={require('../img/pruebaface.jpg')} /> */}
+                {avatarUser ? (
+                    <View style={[Theme.styles.borde2, themeBordeSelectPicker, { borderRadius: 100 }]}>
+                        <Avatar.Image size={150} source={{ uri: avatar }} style={Theme.styles.backgroundBlue} />
+                    </View>
+                ) : (
+                    <View style={[Theme.styles.borde2, themeBordeSelectPicker, { borderRadius: 100 }]}>
+                        <Avatar.Text size={150} label={avatarName} style={[Theme.colors.backgroundGray3]} />
+                    </View>
+                )}
                 <Text style={[Theme.styles.fs20, Theme.colors.dark.darkText]}>{firstNameUser} {firstLastNameUser}</Text>
             </View>
             <DrawerContentScrollView {...props}
@@ -28,7 +36,7 @@ const ComponentMenu = (props) => {
             >
                 <DrawerItemList  {...props} />
             </DrawerContentScrollView>
-            <View style={[Theme.colors.backgroundRed, { padding: 15}]}>
+            <View style={[Theme.colors.backgroundRed, { padding: 15 }]}>
                 <TouchableOpacity onPress={() => {
                     Logout()
                     setLogueado(false)

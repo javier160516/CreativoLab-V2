@@ -126,19 +126,20 @@ const Testimonials = () => {
 
     <SafeAreaView style={[Theme.styles.flex1, themeContainerStyle]}>
       <StatusBar style='auto' />
-      <View style={[Theme.styles.flexRow, Theme.styles.justifyBetween, Theme.styles.alignCenter, Theme.styles.mh20, Theme.styles.mt10, Theme.styles.mb20]}>
-        <Text style={[Theme.styles.fsTitle3, themeTextStyle, Theme.styles.bold]}>Testimonios</Text>
-        <Switch
-          value={switchVisible}
-          onValueChange={moduleEnable}
-          color={Theme.colors.azul}
-          trackColor={{ false: Theme.colors.grisClaro, true: Theme.colors.grisClaro }}
-        />
-      </View>
       <ScrollView
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        <View style={[Theme.styles.mh20, Theme.styles.mb20, Theme.styles.mt10, Theme.styles.bordeRedondo1, themeCards, Theme.styles.pt10, Theme.styles.pb20, Theme.styles.borde1, themeBorderTestimonials]}>
+        <View style={[Theme.styles.flexRow, Theme.styles.justifyBetween, Theme.styles.alignCenter, Theme.styles.mh20, Theme.styles.mt10, Theme.styles.mb20]}>
+          <Text style={[Theme.styles.fsTitle3, themeTextStyle, Theme.styles.bold]}>Testimonios</Text>
+          <Switch
+            value={switchVisible}
+            onValueChange={moduleEnable}
+            color={Theme.colors.azul}
+            trackColor={{ false: Theme.colors.grisClaro, true: Theme.colors.grisClaro }}
+          />
+        </View>
+
+        <View style={[Theme.styles.mh10, Theme.styles.mb10, Theme.styles.mt10, Theme.styles.bordeRedondo1, themeCards, Theme.styles.pt10, Theme.styles.pb20, Theme.styles.borde2, themeBorderTestimonials]}>
           <View style={[Theme.styles.mh20, Theme.styles.mb20]}>
             <View style={[Theme.styles.flexRow, Theme.styles.alignCenter, Theme.styles.justifyBetween]}>
               <Text style={[Theme.styles.fs20, themeTextStyle, Theme.styles.bold]}>Testimonios</Text>

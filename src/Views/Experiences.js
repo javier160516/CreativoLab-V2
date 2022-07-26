@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, View, Pressable, Text, ScrollView, Alert, RefreshControl } from 'react-native';
-import { Switch } from 'react-native-paper';
+import { Card, Switch } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import Theme from '../Theme/Theme';
 import DetectarTema from '../helpers/DetectarTema';
@@ -19,7 +19,7 @@ const Experiences = () => {
   const [experiences, setExperiences] = useState([]);
   const [experience, setExperience] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
-  const { themeContainerStyle, themeTextStyle, themeCards } = DetectarTema()
+  const { themeContainerStyle, themeTextStyle, themeCards, themeBorderTestimonials } = DetectarTema()
   const { setLogueado } = useLogin();
   const [btnVisible, setBtnVisible] = useState(false);
   const [switchVisible, setSwitchVisible] = useState(false);
@@ -33,8 +33,8 @@ const Experiences = () => {
   const getExperiences = async () => {
     try {
       const response = await axios.get('http://dev.creativolab.com.mx/api/v1/modules/experiences');
-        setExperiences(response.data.experiences);
-        response.data.module_status === 1 ? setSwitchVisible(true) : setSwitchVisible(false);
+      setExperiences(response.data.experiences);
+      response.data.module_status === 1 ? setSwitchVisible(true) : setSwitchVisible(false);
     } catch (error) {
       if (error.response.data.status == 401) {
         Alert.alert(
@@ -83,10 +83,10 @@ const Experiences = () => {
       text: 'Si, eliminar', onPress: async () => {
         try {
           const response = await axios.delete('http://dev.creativolab.com.mx/api/v1/modules/experiences', { data: { id: parseInt(id) } })
-          if(response.data.status == 200){
+          if (response.data.status == 200) {
             setExperiences([]);
             setSwitchVisible(false);
-            Alert.alert('Experiencia Eliminada', 'La experiencia ha sido eliminada correctamente', [{text: 'Ok'}]);
+            Alert.alert('Experiencia Eliminada', 'La experiencia ha sido eliminada correctamente', [{ text: 'Ok' }]);
           }
           // const experiencesUpdated = experiences.filter(experienceState => experienceState.id !== id);
         } catch (error) {
@@ -114,8 +114,8 @@ const Experiences = () => {
     try {
       const enable = { experiences_enabled: !switchVisible }
       const response = await axios.put('http://dev.creativolab.com.mx/api/v1/modules/experiences/toggle', enable);
-      if(response.data.status == 200){
-        Alert.alert('Cambio Exitoso', response.data.message, [{text: 'Ok'}]);
+      if (response.data.status == 200) {
+        Alert.alert('Cambio Exitoso', response.data.message, [{ text: 'Ok' }]);
         setSwitchVisible(!switchVisible);
       }
     } catch (error) {
@@ -147,18 +147,18 @@ const Experiences = () => {
   return (
     <SafeAreaView style={[Theme.styles.flex1, Theme.styles.pv20, themeContainerStyle]}>
       <StatusBar style='auto' />
-      <View style={[Theme.styles.flexRow, Theme.styles.justifyBetween, Theme.styles.alignCenter, Theme.styles.mh20, Theme.styles.mb20]}>
-        <Text style={[Theme.styles.fsTitle3, themeTextStyle, Theme.styles.bold]}>Experiencia</Text>
-        <Switch
-          value={switchVisible}
-          onValueChange={moduleEnable}
-          color={Theme.colors.azul}
-          trackColor={{ false: Theme.colors.grisClaro, true: Theme.colors.grisClaro }}
-        />
-      </View>
       <ScrollView
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
+        <View style={[Theme.styles.flexRow, Theme.styles.justifyBetween, Theme.styles.alignCenter, Theme.styles.mh20, Theme.styles.mb20]}>
+          <Text style={[Theme.styles.fsTitle3, themeTextStyle, Theme.styles.bold]}>Experiencia</Text>
+          <Switch
+            value={switchVisible}
+            onValueChange={moduleEnable}
+            color={Theme.colors.azul}
+            trackColor={{ false: Theme.colors.grisClaro, true: Theme.colors.grisClaro }}
+          />
+        </View>
         <View style={[Theme.styles.mh20]}>
           <Text style={[themeTextStyle, Theme.styles.fs15, Theme.styles.mv10]}>
             • En esta sección podrás añadir tus experiencias, así como borrar y editarlas.
@@ -168,7 +168,7 @@ const Experiences = () => {
           </Text>
         </View>
 
-        <View style={[Theme.styles.mh10, Theme.styles.mt10, Theme.styles.mb20, themeCards]}>
+        <View style={[Theme.styles.mh10, Theme.styles.mb20, Theme.styles.mt10, Theme.styles.bordeRedondo1, themeCards, Theme.styles.pt10, Theme.styles.pb20, Theme.styles.borde2, themeBorderTestimonials]}>
           <View style={[Theme.styles.flexRow, Theme.styles.alignCenter, Theme.styles.justifyBetween, Theme.styles.mh20]}>
             <Text style={[Theme.styles.fs20, themeTextStyle, Theme.styles.bold]}>Mi Experiencia</Text>
             <Pressable

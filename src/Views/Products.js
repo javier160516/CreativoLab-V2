@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, Pressable, ScrollView, View, SafeAreaView, Alert, RefreshControl } from 'react-native';
 import ModalProducts from '../components/Products/ModalProducts'
-import { Switch } from 'react-native-paper';
+import { Card, Switch } from 'react-native-paper';
 import Theme from '../Theme/Theme'
 import DetectarTema from '../helpers/DetectarTema';
 import { AntDesign } from '@expo/vector-icons';
@@ -18,7 +18,7 @@ const Products = () => {
   const [showModal, setShowModal] = useState(false);
   const [listProducts, setListProducts] = useState([]);
   const [products, setProducts] = useState({});
-  const { themeCards, themeContainerStyle, themeCardsText, themeColorIcons, themeTextStyle } = DetectarTema();
+  const { themeCards, themeContainerStyle, themeCardsText, themeBorderTestimonials } = DetectarTema();
   const { setLogueado } = useLogin();
   const [refreshing, setRefreshing] = useState(false);
   const [switchVisible, setSwitchVisible] = useState(false);
@@ -76,13 +76,11 @@ const Products = () => {
       text: 'Si, eliminar', onPress: async () => {
         try {
           const response = await axios.delete('http://dev.creativolab.com.mx/api/v1/modules/products', { data: { id: parseInt(id) } });
-          console.log(response.data);
           if (response.data.status == 200) {
             setListProducts([]);
             setSwitchVisible(false);
-            Alert.alert('Producto Eliminada', 'El Producto ha sido eliminado correctamente', [{ text: 'Ok' }]);
+            Alert.alert('Producto Eliminada', response.data.message, [{ text: 'Ok' }]);
           }
-          // const experiencesUpdated = experiences.filter(experienceState => experienceState.id !== id);
         } catch (error) {
           if (error.response.data.status == 401) {
             Alert.alert(
@@ -140,19 +138,19 @@ const Products = () => {
 
   return (
     <SafeAreaView style={[themeContainerStyle, Theme.styles.flex1]}>
-      <View style={[Theme.styles.flexRow, Theme.styles.alignCenter, Theme.styles.justifyBetween, Theme.styles.mh20, Theme.styles.mv10]}>
-        <Text style={[Theme.styles.semiBold, themeCardsText, Theme.styles.fsTitle3]}>Producto</Text>
-        <Switch
-          value={switchVisible}
-          onValueChange={moduleEnable}
-          color={Theme.colors.azul}
-          trackColor={{ false: Theme.colors.grisClaro, true: Theme.colors.grisClaro }}
-        />
-      </View>
       <ScrollView
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        <View style={[Theme.styles.mh20, Theme.styles.bordeRedondo1, themeCards, Theme.styles.mv10, Theme.styles.pv20]}>
+        <View style={[Theme.styles.flexRow, Theme.styles.alignCenter, Theme.styles.justifyBetween, Theme.styles.mh20, Theme.styles.mv10]}>
+          <Text style={[Theme.styles.semiBold, themeCardsText, Theme.styles.fsTitle3]}>Producto</Text>
+          <Switch
+            value={switchVisible}
+            onValueChange={moduleEnable}
+            color={Theme.colors.azul}
+            trackColor={{ false: Theme.colors.grisClaro, true: Theme.colors.grisClaro }}
+          />
+        </View>
+        <View style={[Theme.styles.mh10, Theme.styles.mb20, Theme.styles.mt10, Theme.styles.bordeRedondo1, themeCards, Theme.styles.pt10, Theme.styles.pb20, Theme.styles.borde2, themeBorderTestimonials]}>
           <View style={[Theme.styles.flexRow, Theme.styles.justifyBetween, Theme.styles.alignCenter, Theme.styles.mh20, Theme.styles.pv10]}>
             <Text style={[themeCardsText, Theme.styles.fs20, Theme.styles.semiBold]}>Producto</Text>
             <Pressable onPress={() => setShowModal(true)} style={[Theme.colors.backgroundBlue, Theme.styles.alignCenter, Theme.styles.bordeRedondo1]}>

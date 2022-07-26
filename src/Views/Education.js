@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { SafeAreaView, Pressable, Text, ScrollView, Alert, View, RefreshControl } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { Switch } from "react-native-paper";
+import { Card, Switch } from "react-native-paper";
 import { AntDesign } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
@@ -17,7 +17,7 @@ const wait = timeout => {
 };
 
 const Education = () => {
-  const { themeContainerStyle, themeTextStyle, themeCards } = DetectarTema();
+  const { themeContainerStyle, themeTextStyle, themeCards, themeBorderTestimonials } = DetectarTema();
   const [modalVisible, setModalVisible] = useState(false);
   const [switchVisible, setSwitchVisible] = useState('');
   const [educations, setEducations] = useState([]);
@@ -132,8 +132,8 @@ const Education = () => {
               AsyncStorage.clear();
             }
           }])
-      }else if(error.response.data.status == 403){
-        Alert.alert('¡Error!', error.response.data.message, [{text: 'Ok'}]);
+      } else if (error.response.data.status == 403) {
+        Alert.alert('¡Error!', error.response.data.message, [{ text: 'Ok' }]);
       } else {
         Alert.alert('¡Hubo un error!', 'Lo sentimos, por favor, intente más tarde', [{ text: 'Ok' }]);
       }
@@ -151,19 +151,20 @@ const Education = () => {
   return (
     <SafeAreaView style={[Theme.styles.flex1, themeContainerStyle]}>
       <StatusBar style='auto' />
-      <View style={[Theme.styles.flexRow, Theme.styles.justifyBetween, Theme.styles.alignCenter, Theme.styles.mh20, Theme.styles.mv20]}>
-        <Text style={[Theme.styles.fsTitle3, themeTextStyle, Theme.styles.bold]}>Estudios</Text>
-        <Switch
-          value={switchVisible}
-          onValueChange={moduleEnable}
-          color={Theme.colors.azul}
-          trackColor={{ false: Theme.colors.grisClaro, true: Theme.colors.grisClaro }}
-        />
-      </View>
       <ScrollView
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        <View style={[Theme.styles.mh10, Theme.styles.mt10, Theme.styles.mb20, themeCards]}>
+        <View style={[Theme.styles.flexRow, Theme.styles.justifyBetween, Theme.styles.alignCenter, Theme.styles.mh20, Theme.styles.mv20]}>
+          <Text style={[Theme.styles.fsTitle3, themeTextStyle, Theme.styles.bold]}>Estudios</Text>
+          <Switch
+            value={switchVisible}
+            onValueChange={moduleEnable}
+            color={Theme.colors.azul}
+            trackColor={{ false: Theme.colors.grisClaro, true: Theme.colors.grisClaro }}
+          />
+        </View>
+
+        <View style={[Theme.styles.mh10, Theme.styles.mb20, Theme.styles.mt10, Theme.styles.bordeRedondo1, themeCards, Theme.styles.pt10, Theme.styles.pb20, Theme.styles.borde2, themeBorderTestimonials]}>
           <View style={[Theme.styles.flexRow, Theme.styles.alignCenter, Theme.styles.justifyBetween, Theme.styles.mh20]}>
             <Text style={[Theme.styles.fs20, themeTextStyle, Theme.styles.bold]}>Mis Estudios</Text>
             <Pressable

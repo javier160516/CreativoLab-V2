@@ -28,7 +28,7 @@ import Portfolio from './Portfolio';
 
 const Drawer = createDrawerNavigator();
 
-const Menu = ({modules, firstNameUser, firstLastNameUser, modulesEnable}) => {
+const Menu = ({modules, firstNameUser, firstLastNameUser, avatarUser}) => {
     const { themeTextStyle, themeColorIcons, themeContainerStyle } = DetectarTema();
     const modulesViews = {
         "Education": Education,
@@ -54,6 +54,7 @@ const Menu = ({modules, firstNameUser, firstLastNameUser, modulesEnable}) => {
             drawerContent={props => <ComponentMenu {...props}
                 firstNameUser={firstNameUser}
                 firstLastNameUser={firstLastNameUser}
+                avatarUser={avatarUser}
             />}
             screenOptions={{
                 headerTitleAlign: 'center',
@@ -81,7 +82,6 @@ const Menu = ({modules, firstNameUser, firstLastNameUser, modulesEnable}) => {
                 name={moduleState}
                 component={modulesViews[moduleState]}
                 key={moduleState}
-                initialParams={{enable: modulesEnable.educationEnable}}
                 options={{
                     headerMode: 'screen',
                     headerTitleAlign: 'center',
@@ -116,19 +116,8 @@ const Home = () => {
     const { setLogueado } = useLogin();
     const [modules, setModules] = useState([]);
     const [firstNameUser, setFirstNameUser] = useState('');
-    const [middleNameUser, setMiddleNameUser] = useState('');
     const [firstLastNameUser, setFirstLastNameUser] = useState('');
-    const [secondLastNameUser, setSecondLastNameUser] = useState('');
-    const [modulesEnable, setModulesEnable] = useState({
-        educationEnable: 0,
-        skillsEnable: 0,
-        experiencesEnable: 0,
-        productsEnable: 0,
-        servicesEnable: 0,
-        portfolioEnable: 0,
-        testimonialsEnable: 0,
-    });
-    
+    const [avatarUser, setAvatarUser] = useState('');
     
     useEffect(() => {
         const getData = async () => {
@@ -136,17 +125,9 @@ const Home = () => {
                 const response = await axios.get('http://dev.creativolab.com.mx/api/v1/modules');
                 setModules(response.data.modules);
                 setFirstNameUser(response.data.user.first_name);
-                setMiddleNameUser(response.data.user.middle_name);
                 setFirstLastNameUser(response.data.user.first_last_name);
-                setSecondLastNameUser(response.data.user.second_last_name);
-                //Modules enabled
-                // setModulesEnable({educationEnable: response.data.user.is_education_enabled});
-                // setModulesEnable({skillsEnable: response.data.user.are_skills_enabled});
-                // setModulesEnable({experiencesEnable: response.data.user.are_experiences_enabled});
-                // setModulesEnable({productsEnable: response.data.user.are_products_enabled});
-                // setModulesEnable({servicesEnable: response.data.user.are_services_enabled});
-                // setModulesEnable({portfolioEnable: response.data.user.is_portfolio_enabled});
-                // setModulesEnable({testimonialsEnable: response.data.user.are_testimonials_enabled});
+                setAvatarUser(response.data.user.avatar);
+
             } catch (error) {
                 console.log(error.response.data.status);
             }
@@ -179,7 +160,7 @@ const Home = () => {
             modules={modules}
             firstNameUser={firstNameUser}
             firstLastNameUser={firstLastNameUser}
-            modulesEnable={modulesEnable}
+            avatarUser={avatarUser}
         />
     )
 }
